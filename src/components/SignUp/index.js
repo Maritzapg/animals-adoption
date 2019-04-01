@@ -17,6 +17,7 @@ const INITIAL_STATE = {
   email: '',
   passwordOne: '',
   passwordTwo: '',
+  isAdmin: false,
   error: null,
 };
 
@@ -33,6 +34,15 @@ class SignUpFormBase extends Component {
     this.props.firebase
       .doCreateUserWithEmailAndPassword(email, passwordOne)
       .then(authUser => {
+        // Create a user in your Firebase realtime database
+        return this.props.firebase
+          .user(authUser.user.uid)
+          .set({
+            username,
+            email,
+          });
+      })
+      .then(authUser => {
         this.setState({ ...INITIAL_STATE });
         this.props.history.push(ROUTES.HOME);
       })
@@ -47,12 +57,17 @@ class SignUpFormBase extends Component {
     this.setState({ [event.target.name]: event.target.value });
   };
 
+  onChangeCheckbox = event => {
+    this.setState({ [event.target.name]: event.target.checked });
+  };
+
   render() {
     const {
         username,
         email,
         passwordOne,
         passwordTwo,
+        isAdmin,
         error,
     } = this.state;
 
@@ -69,7 +84,7 @@ class SignUpFormBase extends Component {
           value={username}
           onChange={this.onChange}
           type="text"
-          placeholder="Full Name"
+          placeholder="Full name"
         />
         <input
           name="email"
@@ -90,8 +105,17 @@ class SignUpFormBase extends Component {
           value={passwordTwo}
           onChange={this.onChange}
           type="password"
-          placeholder="Confirm Password"
+          placeholder="Confirm password"
         />
+        <label>
+          Admin:
+          <input
+          name="isAdmin"
+          type="checkbox"
+          checked={isAdmin}
+          onChange={this.onChangeCheckbox}
+        />
+        </label>
         <button disabled={isInvalid} type="submit">
             Sign Up
         </button>
