@@ -23,17 +23,22 @@ class Firebase {
     // *** Auth API ***
 
     doCreateUserWithEmailAndPassword = (email, password) =>
-    this.auth.createUserWithEmailAndPassword(email, password);
+      this.auth.createUserWithEmailAndPassword(email, password);
 
     doSignInWithEmailAndPassword = (email, password) =>
-    this.auth.signInWithEmailAndPassword(email, password);
+      this.auth.signInWithEmailAndPassword(email, password);
 
     doSignOut = () => this.auth.signOut();
 
     doPasswordReset = email => this.auth.sendPasswordResetEmail(email);
 
     doPasswordUpdate = password =>
-    this.auth.currentUser.updatePassword(password);
+      this.auth.currentUser.updatePassword(password);
+
+    doSendEmailVerification = () =>
+      this.auth.currentUser.sendEmailVerification({
+      url: 'http://localhost:3000'//process.env.REACT_APP_CONFIRMATION_EMAIL_REDIRECT,
+    });
 
     // *** Merge Auth and DB User API *** //
     onAuthUserListener = (next, fallback) =>
@@ -57,6 +62,8 @@ class Firebase {
             authUser = {
               uid: authUser.uid,
               email: authUser.email,
+              emailVerified: authUser.emailVerified,
+              providerData: authUser.providerData,
             ...dbUser,
             };
 
