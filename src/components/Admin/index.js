@@ -67,157 +67,157 @@ import * as ROUTES from '../../constants/routes';
 }*/
 
 const AdminPage = () => (
-  <div>
-    <h1>Admin</h1>
-    <p>The Admin Page is accessible by every signed in admin user.</p>
+    <div>
+        <h1>Admin</h1>
+        <p>The Admin Page is accessible by every signed in admin user.</p>
 
-    <Switch>
-      <Route exact path={ROUTES.ADMIN_DETAILS} component={UserItem} />
-      <Route exact path={ROUTES.ADMIN} component={UserList} />
-    </Switch>
-  </div>
+        <Switch>
+            <Route exact path={ROUTES.ADMIN_DETAILS} component={UserItem} />
+            <Route exact path={ROUTES.ADMIN} component={UserList} />
+        </Switch>
+    </div>
 );
 
 class UserListBase extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loading: false,
-      users: [],
-    };
-  }
+    constructor(props) {
+        super(props);
+        this.state = {
+            loading: false,
+            users: [],
+        };
+    }
 
-  componentDidMount() {
-    this.setState({ loading: true });
+    componentDidMount() {
+        this.setState({ loading: true });
 
-    this.props.firebase.users().on('value', snapshot => {
-      const usersObject = snapshot.val();
-      const usersList = Object.keys(usersObject).map(key => ({
-        ...usersObject[key],
-        uid: key,
-      }));
+        this.props.firebase.users().on('value', snapshot => {
+            const usersObject = snapshot.val();
+            const usersList = Object.keys(usersObject).map(key => ({
+                ...usersObject[key],
+                uid: key,
+            }));
 
-      this.setState({
-        users: usersList,
-        loading: false,
-      });
-    });
-  }
+            this.setState({
+                users: usersList,
+                loading: false,
+            });
+        });
+    }
 
-  componentWillUnmount() {
-    this.props.firebase.users().off();
-  }
+    componentWillUnmount() {
+        this.props.firebase.users().off();
+    }
 
-  render() {
-    const { users, loading } = this.state;
+    render() {
+        const { users, loading } = this.state;
 
-    return (
-      <div>
-        <h2>Users</h2>
-        {loading && <div>Loading ...</div>}
-        <ul>
-          {users.map(user => (
-            <li key={user.uid}>
-              {/*<span>
-                <strong>ID:</strong> {user.uid}
-              </span>*/}
-              {'    '}
-              <span>
-                <strong>e-mail:</strong> {user.email}
-              </span>
-              {'    '}
-              <span>
-                <strong>Username:</strong> {user.username}
-              </span>
-              {'    '}
-              <span>
-                <Link
-                  to={{
-                    pathname: `${ROUTES.ADMIN}/${user.uid}`,
-                    state: { user },
-                  }}
-                >
-                  Details
-              </Link>
-              </span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    );
-  }
+        return (
+            <div>
+                <h2>Users</h2>
+                {loading && <div>Loading ...</div>}
+                <ul>
+                    {users.map(user => (
+                        <li key={user.uid}>
+                            {/*<span>
+                                <strong>ID:</strong> {user.uid}
+                            </span>*/}
+                            {'    '}
+                            <span>
+                                <strong>e-mail:</strong> {user.email}
+                            </span>
+                            {'    '}
+                            <span>
+                                <strong>Username:</strong> {user.username}
+                            </span>
+                            {'    '}
+                            <span>
+                                <Link
+                                    to={{
+                                        pathname: `${ROUTES.ADMIN}/${user.uid}`,
+                                        state: { user },
+                                    }}
+                                >
+                                    Details
+                                </Link>
+                            </span>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        );
+    }
 }
 
 class UserItemBase extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loading: false,
-      user: null,
-      ...props.location.state,
-    };
-  }
-
-  componentDidMount() {
-    if (this.state.user) {
-      return;
+    constructor(props) {
+        super(props);
+        this.state = {
+            loading: false,
+            user: null,
+            ...props.location.state,
+        };
     }
 
-    this.setState({ loading: true });
+    componentDidMount() {
+        if (this.state.user) {
+            return;
+        }
 
-    this.props.firebase
-      .user(this.props.match.params.id)
-      .on('value', snapshot => {
-        this.setState({
-          user: snapshot.val(),
-          loading: false,
-        });
-      });
-  }
+        this.setState({ loading: true });
 
-  componentWillUnmount() {
-    this.props.firebase.user(this.props.match.params.id).off();
-  }
+        this.props.firebase
+            .user(this.props.match.params.id)
+            .on('value', snapshot => {
+                this.setState({
+                    user: snapshot.val(),
+                    loading: false,
+                });
+            });
+    }
 
-  onSendPasswordResetEmail = () => {
-    this.props.firebase.doPasswordReset(this.state.user.email);
-  };
+    componentWillUnmount() {
+        this.props.firebase.user(this.props.match.params.id).off();
+    }
 
-  render() {
-    const { user, loading } = this.state;
+    onSendPasswordResetEmail = () => {
+        this.props.firebase.doPasswordReset(this.state.user.email);
+    };
 
-    return (
-      <div>
-        <h2>User ({this.props.match.params.id})</h2>
-        {loading && <div>Loading ...</div>}
+    render() {
+        const { user, loading } = this.state;
 
-        {user && (
-          <div>
-            {/*<span>
-              <strong>ID:</strong> {user.uid}
-            </span>*/}
-            {'    '}
-            <span>
-              <strong>e-mail:</strong> {user.email}
-            </span>
-            {'    '}
-            <span>
-              <strong>Username:</strong> {user.username}
-            </span>
-            <br/>
-            <span>
-              <button
-                type="button"
-                onClick={this.onSendPasswordResetEmail}
-              >
-                Send Password Reset
+        return (
+            <div>
+                <h2>User ({this.props.match.params.id})</h2>
+                {loading && <div>Loading ...</div>}
+
+                {user && (
+                    <div>
+                        {/*<span>
+                        <strong>ID:</strong> {user.uid}
+                        </span>*/}
+                        {'    '}
+                        <span>
+                            <strong>e-mail:</strong> {user.email}
+                        </span>
+                        {'    '}
+                        <span>
+                            <strong>Username:</strong> {user.username}
+                        </span>
+                        <br />
+                        <span>
+                            <button
+                                type="button"
+                                onClick={this.onSendPasswordResetEmail}
+                            >
+                                Send Password Reset
               </button>
-            </span>
-          </div>
-        )}
-      </div>
-    );
-  }
+                        </span>
+                    </div>
+                )}
+            </div>
+        );
+    }
 }
 
 /*const UserList = ({ users }) => (
@@ -243,12 +243,12 @@ const UserList = withFirebase(UserListBase);
 const UserItem = withFirebase(UserItemBase);
 
 const condition = authUser =>
-  authUser && authUser.roles.includes(ROLES.ADMIN);
+    authUser && authUser.roles.includes(ROLES.ADMIN);
 
 export default compose(
-  withEmailVerification,
-  withAuthorization(condition),
-  withFirebase,
+    withEmailVerification,
+    withAuthorization(condition),
+    withFirebase,
 )(AdminPage);
 
 //export default withFirebase(AdminPage);
