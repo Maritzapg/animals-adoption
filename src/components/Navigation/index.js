@@ -35,6 +35,9 @@ const NavigationAuth = ({ authUser }) => (
                         {/* <a className="nav-link" href="#">Cuidados de las mascotas</a> */}
                     </li>
                     <li className="nav-item">
+                        <Link className="nav-link" to={ROUTES.PETS_LIST}>Mascotas para adoptar</Link>
+                    </li>
+                    <li className="nav-item">
                         <Link className="nav-link" to={ROUTES.ACCOUNT}>Cuenta</Link>
                         {/* <a className="nav-link" href="#">Mascotas para adoptar</a> */}
                     </li>
@@ -66,7 +69,7 @@ const NavigationNonAuth = () => (
                         <a className="nav-link" href="#">Cuidados de las mascotas</a> 
                     </li> 
                     <li className="nav-item">
-                        <a className="nav-link" href="#">Mascotas para adoptar</a>
+                        <Link className="nav-link" to={ROUTES.PETS_LIST}>Mascotas para adoptar</Link>
                     </li>
                     <li className="nav-item">
                         <Link className="nav-link" to={ROUTES.SIGN_IN}>Iniciar sesion</Link>
