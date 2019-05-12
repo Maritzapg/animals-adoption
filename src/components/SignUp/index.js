@@ -20,6 +20,18 @@ const INITIAL_STATE = {
     passwordTwo: '',
     isAdmin: false,
     error: null,
+    strengthPwd: 'Ninguna'
+};
+
+const style = {
+    fontSize:14, 
+    textAlign:'center'
+};
+
+const TEXTS = {
+    LOW: 'Baja',
+    MEDIUM: 'Media',
+    HIGH: 'Alta'
 };
 
 class SignUpFormBase extends Component {
@@ -36,35 +48,77 @@ class SignUpFormBase extends Component {
         if (isAdmin) {
             roles.push(ROLES.ADMIN);
         }
-
+        
         this.props.firebase
-            .doCreateUserWithEmailAndPassword(email, passwordOne)
-            .then(authUser => {
-                // Create a user in your Firebase realtime database
-                return this.props.firebase
-                    .user(authUser.user.uid)
-                    .set({
-                        username,
-                        email,
-                        roles
-                    });
-            })
-            .then(() => {
-                return this.props.firebase.doSendEmailVerification();
-            })
-            .then(authUser => {
-                this.setState({ ...INITIAL_STATE });
-                this.props.history.push(ROUTES.HOME);
-            })
-            .catch(error => {
-                this.setState({ error });
-            });
+        .doCreateUserWithEmailAndPassword(email, passwordOne)
+        .then(authUser => {
+            // Create a user in your Firebase realtime database
+            return this.props.firebase
+                .user(authUser.user.uid)
+                .set({
+                    username,
+                    email,
+                    roles
+                });
+        })
+        .then(() => {
+            return this.props.firebase.doSendEmailVerification();
+        })
+        .then(authUser => {
+            this.setState({ ...INITIAL_STATE });
+            this.props.history.push(ROUTES.HOME);
+        })
+        .catch(error => {
+            this.setState({ error });
+        });
 
         event.preventDefault();
     }
 
     onChange = event => {
-        this.setState({ [event.target.name]: event.target.value });
+
+        if(event.target.name === 'passwordOne')
+        {
+            // Create an array and push all possible values that you want in password
+            var matchedCase = new Array();
+            matchedCase.push("[$@$!%*#?&]"); // Special Charector
+            matchedCase.push("[A-Z]");      // Uppercase Alpabates
+            matchedCase.push("[0-9]");      // Numbers
+            matchedCase.push("[a-z]");      // Lowercase Alpabates
+
+            var ctr = 0;
+            for (var i = 0; i < matchedCase.length; i++) {
+                if (new RegExp(matchedCase[i]).test(event.target.value)) {
+                    ctr++;
+                }
+            }
+
+            // Display it
+            var color = "";
+            var strengthPwd = "";
+            switch (ctr) {
+                case 0:
+                case 1:
+                case 2:
+                    strengthPwd = TEXTS.LOW;
+                    color = "red";
+                    break;
+                case 3:
+                    strengthPwd = TEXTS.MEDIUM;
+                    color = "orange";
+                    break;
+                case 4:
+                    strengthPwd = TEXTS.HIGH;
+                    color = "green";
+                    break;
+            }
+
+            this.setState({ [event.target.name]: event.target.value, strengthPwd, color });
+        }
+        else
+        {
+            this.setState({ [event.target.name]: event.target.value });
+        }
     };
 
     onChangeCheckbox = event => {
@@ -79,29 +133,31 @@ class SignUpFormBase extends Component {
             passwordTwo,
             isAdmin,
             error,
-        } = this.state;
+            strengthPwd,
+            color
+        } = this.state; 
 
         const isInvalid =
             passwordOne !== passwordTwo ||
             passwordOne === '' ||
             email === '' ||
-            username === '';
+            username === '' || strengthPwd !== TEXTS.HIGH;
 
         return (
             <div className="font-login">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-10 col-xl-9 mx-auto">
-                            <div class="card card-signin flex-row my-5">
-                                <div class="card-img-left d-none d-md-flex" />
-                                <div class="card-body">
-                                    <h5 class="card-title text-center">Regístrate</h5>
-                                    <form onSubmit={this.onSubmit} class="form-signin">
-                                        <div class="form-label-group">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-lg-10 col-xl-9 mx-auto">
+                            <div className="card card-signin flex-row my-5">
+                                <div className="card-img-left d-none d-md-flex" />
+                                <div className="card-body">
+                                    <h5 className="card-title text-center">Registrate</h5>
+                                    <form onSubmit={this.onSubmit} className="form-signin">
+                                        <div className="form-label-group">
                                             <input
                                                 name="username"
                                                 id="inputUserame"
-                                                class="form-control"
+                                                className="form-control"
                                                 value={username}
                                                 onChange={this.onChange}
                                                 type="text"
@@ -111,14 +167,14 @@ class SignUpFormBase extends Component {
                                             <label htmlFor="inputUserame">Nombre de usuario</label>
                                         </div>
 
-                                        <div class="form-label-group">
+                                        <div className="form-label-group">
                                             <input
                                                 name="email"
                                                 value={email}
                                                 onChange={this.onChange}
                                                 type="email"
                                                 id="inputEmail"
-                                                class="form-control"
+                                                className="form-control"
                                                 placeholder='Correo'
                                                 required
                                             />
@@ -127,28 +183,28 @@ class SignUpFormBase extends Component {
 
                                         <hr />
 
-                                        <div class="form-label-group">
+                                        <div className="form-label-group">
                                             <input
                                                 name="passwordOne"
                                                 value={passwordOne}
                                                 onChange={this.onChange}
                                                 type="password"
                                                 id="inputPassword"
-                                                class="form-control"
+                                                className="form-control"
                                                 placeholder='Contraseña'
                                                 required
                                             />
                                             <label htmlFor="inputPassword">Contraseña</label>
                                         </div>
 
-                                        <div class="form-label-group">
+                                        <div className="form-label-group">
                                             <input
                                                 name="passwordTwo"
                                                 value={passwordTwo}
                                                 onChange={this.onChange}
                                                 type="password"
                                                 id="inputConfirmPassword"
-                                                class="form-control"
+                                                className="form-control"
                                                 placeholder='Confirmar contraseña'
                                                 required
                                             />
@@ -164,14 +220,19 @@ class SignUpFormBase extends Component {
                                             />
                                             <label className="custom-control-label" htmlFor="isAdmin">Administrador</label>
                                         </div>
+                                        <hr/>
+                                        <h6 style={style}>{strengthPwd === TEXTS.LOW || strengthPwd === TEXTS.MEDIUM?'La contraseña debe tener más de seis caracteres':''}</h6>
+                                        <h6 style={style}>{strengthPwd === TEXTS.LOW || strengthPwd === TEXTS.MEDIUM?'al menos un número, una mayuscula, una minúscula':''}</h6>
+                                        <h6 style={style}>{strengthPwd === TEXTS.LOW || strengthPwd === TEXTS.MEDIUM?'y un caracter especial':''}</h6>
+                                        <label>Seguridad de la contraseña: <label style={{color:color}}>{strengthPwd}</label></label>
 
-                                        <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit" disabled={isInvalid}>Regístrate</button>
+                                        <button className="btn btn-lg btn-primary btn-block text-uppercase" type="submit" disabled={isInvalid}>Regístrate</button>
                                         <SignInLink/>
                                             
                                         {error && <p>{error.message}</p>}
-                                        <hr class="my-4" />
+                                        <hr className="my-4" />
 
-                                        <button class="btn btn-lg btn-google btn-block text-uppercase" type="submit"><i class="fab fa-google mr-2"></i> Regístrate con Google </button>
+                                        <button className="btn btn-lg btn-google btn-block text-uppercase" type="submit"><i className="fab fa-google mr-2"></i> Regístrate con Google </button>
                                     </form>
                                 </div>
                             </div>
@@ -185,7 +246,7 @@ class SignUpFormBase extends Component {
 
 const SignUpLink = () => (
     <p>
-        ¿No tienes una cuenta? <Link to={ROUTES.SIGN_UP}>Registrate</Link>
+        ¿No tienes una cuenta? <Link to={ROUTES.SIGN_UP}>Regístrate</Link>
     </p>
 );
 

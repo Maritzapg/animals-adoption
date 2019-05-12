@@ -33,7 +33,7 @@ code {
 .font-login {
   background: #007bff;
   background: linear-gradient(to right, #118BD6, #4EE282);
-  height: -webkit-fill-available;
+  height: -webkit-fill-available, auto;
 }
 
 .card-signin {

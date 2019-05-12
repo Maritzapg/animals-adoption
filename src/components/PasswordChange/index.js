@@ -8,6 +8,17 @@ const INITIAL_STATE = {
   error: null,
 };
 
+const style = {
+  fontSize:14, 
+  textAlign:'center'
+};
+
+const TEXTS = {
+  LOW: 'Baja',
+  MEDIUM: 'Media',
+  HIGH: 'Alta'
+};
+
 class PasswordChangeForm extends Component {
   constructor(props) {
     super(props);
@@ -31,14 +42,55 @@ class PasswordChangeForm extends Component {
   };
 
   onChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
+    if(event.target.name === 'passwordOne')
+        {
+            // Create an array and push all possible values that you want in password
+            var matchedCase = new Array();
+            matchedCase.push("[$@$!%*#?&]"); // Special Charector
+            matchedCase.push("[A-Z]");      // Uppercase Alpabates
+            matchedCase.push("[0-9]");      // Numbers
+            matchedCase.push("[a-z]");      // Lowercase Alpabates
+
+            var ctr = 0;
+            for (var i = 0; i < matchedCase.length; i++) {
+                if (new RegExp(matchedCase[i]).test(event.target.value)) {
+                    ctr++;
+                }
+            }
+
+            // Display it
+            var color = "";
+            var strengthPwd = "";
+            switch (ctr) {
+                case 0:
+                case 1:
+                case 2:
+                    strengthPwd = TEXTS.LOW;
+                    color = "red";
+                    break;
+                case 3:
+                    strengthPwd = TEXTS.MEDIUM;
+                    color = "orange";
+                    break;
+                case 4:
+                    strengthPwd = TEXTS.HIGH;
+                    color = "green";
+                    break;
+            }
+
+            this.setState({ [event.target.name]: event.target.value, strengthPwd, color });
+        }
+        else
+        {
+            this.setState({ [event.target.name]: event.target.value });
+        }
   };
 
   render() {
-    const { passwordOne, passwordTwo, error } = this.state;
+    const { passwordOne, passwordTwo, error, strengthPwd, color } = this.state;
 
     const isInvalid =
-      passwordOne !== passwordTwo || passwordOne === '';
+      passwordOne !== passwordTwo || passwordOne === '' || strengthPwd !== TEXTS.HIGH;
 
     return (
       <div className="font-login2">
@@ -48,7 +100,7 @@ class PasswordChangeForm extends Component {
               <div className="card card-signin my-5">
                 <div className="card-body">
                   <h5 className="card-title text-center">Cambiar contraseña</h5>
-                  <div classNameName="form-label-group">
+                  <div className="form-label-group">
                     <div>
                       Cuenta: {this.props.mailAccount}
                     </div>
@@ -66,7 +118,7 @@ class PasswordChangeForm extends Component {
                         name="passwordOne"
                         required autoFocus
                       />
-                      <label for="inputPasswordOne">Nueva Contraseña</label>
+                      <label htmlFor="inputPasswordOne">Nueva Contraseña</label>
                     </div>
                     <div className="form-label-group">
                       <input
@@ -79,8 +131,13 @@ class PasswordChangeForm extends Component {
                         onChange={this.onChange}
                         required
                       />
-                      <label for="inputPasswordTwo">Repetir contraseña</label>
+                      <label htmlFor="inputPasswordTwo">Repetir contraseña</label>
                     </div>
+
+                    <h6 style={style}>{strengthPwd === TEXTS.LOW || strengthPwd === TEXTS.MEDIUM?'La contraseña debe tener más de seis caracteres':''}</h6>
+                    <h6 style={style}>{strengthPwd === TEXTS.LOW || strengthPwd === TEXTS.MEDIUM?'al menos un número, una mayuscula, una minúscula':''}</h6>
+                    <h6 style={style}>{strengthPwd === TEXTS.LOW || strengthPwd === TEXTS.MEDIUM?'y un caracter especial':''}</h6>
+                    <label>Seguridad de la contraseña: <label style={{color:color}}>{strengthPwd}</label></label>
 
                     <hr className="my-4" />
 

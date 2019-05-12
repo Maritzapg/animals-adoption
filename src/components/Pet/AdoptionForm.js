@@ -5,7 +5,6 @@ class AdoptionForm extends Component {
         super(props)
 
         this.state = {
-            activeSlide: 0,
         }
     }
 
@@ -13,7 +12,7 @@ class AdoptionForm extends Component {
     render() {
         return (
             <div>
-                Formulario de adopción
+                Formulario de adopción en construcción
             </div>
         )
     }
