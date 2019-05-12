@@ -33,6 +33,7 @@ code {
 .font-login {
   background: #007bff;
   background: linear-gradient(to right, #118BD6, #4EE282);
+  height: -webkit-fill-available;
 }
 
 .card-signin {
@@ -233,3 +234,34 @@ code {
   font-size: 12px;
   color: #777;
 }
+
+/*Retablecer contraseña*/
+.bg-image2 {
+  background-image: url('https://images.unsplash.com/photo-1517849845537-4d257902454a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=375&q=80 ');
+  background-size: cover;
+  background-position: center;
+}
+
+/*Mensaje de Confirmación*/
+
+.font-login {
+  background: #007bff;
+  background: linear-gradient(to right, #101A2F, #680D76);
+}
+
+.card-signin2 .card-img-left2 { /* Mensaje de Confirmación*/
+  width: 100%;
+  /* Link to your background image using in the property below! */
+  background: scroll center url('https://images.unsplash.com/photo-1516386408840-d718a820a05c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80');
+  background-size: cover;
+}
+
+/*Nueva contraseña*/
+
+.font-login2 {
+  background: #007bff;
+  background: linear-gradient(to right, #B90D79, #EE4936);
+  height: -webkit-fill-available;
+}
+
+/*Registro de mascota*/

@@ -2,74 +2,105 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 import { withFirebase } from '../Firebase';
+import { SignInLink } from '../SignIn/'
 import * as ROUTES from '../../constants/routes';
 
 const PasswordForgetPage = () => (
-  <div>
-    <h1>PasswordForget</h1>
-    <PasswordForgetForm />
-  </div>
+    <div>
+        <PasswordForgetForm />
+    </div>
 );
 
 const INITIAL_STATE = {
-  email: '',
-  error: null,
+    email: '',
+    error: null,
 };
 
 class PasswordForgetFormBase extends Component {
-  constructor(props) {
-    super(props);
+    constructor(props) {
+        super(props);
 
-    this.state = { ...INITIAL_STATE };
-  }
+        this.state = { ...INITIAL_STATE };
+    }
 
-  onSubmit = event => {
-    const { email } = this.state;
+    onSubmit = event => {
+        const { email } = this.state;
 
-    this.props.firebase
-      .doPasswordReset(email)
-      .then(() => {
-        this.setState({ ...INITIAL_STATE });
-      })
-      .catch(error => {
-        this.setState({ error });
-      });
+        this.props.firebase
+            .doPasswordReset(email)
+            .then(() => {
+                this.setState({ ...INITIAL_STATE });
+            })
+            .catch(error => {
+                this.setState({ error });
+            });
 
-    event.preventDefault();
-  };
+        event.preventDefault();
+    };
 
-  onChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
-  };
+    onChange = event => {
+        this.setState({ [event.target.name]: event.target.value });
+    };
 
-  render() {
-    const { email, error } = this.state;
+    render() {
+        const { email, error } = this.state;
 
-    const isInvalid = email === '';
+        const isInvalid = email === '';
 
-    return (
-      <form onSubmit={this.onSubmit}>
-        <input
-          name="email"
-          value={this.state.email}
-          onChange={this.onChange}
-          type="text"
-          placeholder="Email Address"
-        />
-        <button disabled={isInvalid} type="submit">
-          Reset Password
-        </button>
+        return (
+            <div className="font-login2">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
+                            <div className="card card-signin my-5">
+                                <div className="card-body">
+                                    <h5 className="card-title text-center">Restablecimiento de contraseña</h5>
+                                    <div className="form-label-group">
+                                        <div>
+                                            <label htmlFor="inputUserame">Por favor ingresa tu correo electrónico.</label>
+                                        </div>
+                                    </div>
+                                    <form className="form-signin" onSubmit={this.onSubmit}>
+                                        <div className="form-label-group">
+                                            <input
+                                                type="email" id="inputEmail"
+                                                className="form-control"
+                                                placeholder="Correo electrónico"
+                                                name="email"
+                                                value={this.state.email}
+                                                onChange={this.onChange}
+                                                required autoFocus
+                                            />
+                                            <label htmlFor="inputEmail">Correo electrónico</label>
+                                        </div>
 
-        {error && <p>{error.message}</p>}
-      </form>
-    );
-  }
+                                        <hr className="my-4" />
+
+                                        <button
+                                            className="btn btn-lg btn-primary btn-block text-uppercase"
+                                            type="submit"
+                                            disabled={isInvalid}
+                                        >
+                                            Restablecer contraseña
+                                        </button>
+                                        <SignInLink/>
+                                    </form>
+                                    <br/>
+                                    {error && <p>{error.message}</p>}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 }
 
 const PasswordForgetLink = () => (
-  <p>
-    <Link to={ROUTES.PASSWORD_FORGET}>¿Olvidaste la constraseña?</Link>
-  </p>
+    <p>
+        <Link to={ROUTES.PASSWORD_FORGET}>¿Olvidaste la constraseña?</Link>
+    </p>
 );
 
 export default PasswordForgetPage;

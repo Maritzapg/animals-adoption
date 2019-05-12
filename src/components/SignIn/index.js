@@ -100,10 +100,10 @@ class SignInFormBase extends Component {
                                                 />
                                                 <label htmlFor="inputPassword">Contraseña</label>
                                             </div>
-                                            <div className="custom-control custom-checkbox mb-3">
+                                            {/* <div className="custom-control custom-checkbox mb-3">
                                                 <input type="checkbox" className="custom-control-input" id="customCheck1" />
                                                 <label className="custom-control-label" htmlFor="customCheck1">Recordar contraseña</label>
-                                            </div>
+                                            </div> */}
                                             <button className="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2"
                                                 type="submit"
                                                 disabled={isInvalid}
