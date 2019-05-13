@@ -1,18 +1,15 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-
 import * as ROUTES from '../../constants/routes';
 
 class PetsList extends Component {
     constructor(props) {
         super(props)
-        this.state = {
-        }
+        this.state = {}
     }
 
     onClick()
-    {debugger
-        this.props.history.push("/adoption-form")
+    {
+        this.props.history.push(ROUTES.ADOPTION_FORM)
     }
 
     render() {
@@ -41,12 +38,12 @@ class PetsList extends Component {
                             <h5 className="card-title mb-0">Hachiko</h5>
                             <div className="card-text text-black-50">Edad: 2 meses</div>
                             <div className="card-text text-black-50">Raza: criollo</div>
-                            {/* <button className="btn btn-lg btn-success btn-block text-uppercase" 
+                            <button className="btn btn-lg btn-success btn-block text-uppercase" 
                                     type="submit"
                                     onClick={()=>this.onClick()}
                             >
                                 Adoptar
-                            </button> */}
+                            </button>
                         </div>
                     </div>
                 </div>

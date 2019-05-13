@@ -1,23 +1,29 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-
-import PetsList from './PetsList'
+import * as ROUTES from '../../constants/routes';
+import { withFirebase } from '../Firebase';
+import PetsListBase from './PetsList'
 
 class Pets extends Component {
     constructor(props) {
         super(props)
 
-        this.state = {}
+        this.state = {
+            loading: false,
+        }
     }
 
     onClick() 
     {
-        this.props.history.push("/register-pet")
+        this.props.history.push(ROUTES.REGISTER_PET)
     }
 
     render() {
+        const { text, messages, loading } = this.state;
         return (
             <div>
+                {loading && <div>Loading ...</div>}
+
                 <header className="bg-secondary text-center py-3 mb-4">
                     <div className="container">
                         <h1 className="font-weight-light text-white">Listado de mascotas</h1>
@@ -36,12 +42,14 @@ class Pets extends Component {
                             </div>
                         </div>
                     </div>
-                    <PetsList/>
+                    <PetsList history={this.props.history}/>
                 </div>
                 
             </div>
         )
     }
 }
+
+const PetsList = withFirebase(PetsListBase);
 
 export default Pets; 
