@@ -4,7 +4,10 @@ import * as ROUTES from '../../constants/routes';
 class PetsList extends Component {
     constructor(props) {
         super(props)
-        this.state = {}
+        this.state = {
+            loading: false,
+            pets: [],
+        }
     }
 
     onClick()
@@ -12,8 +15,29 @@ class PetsList extends Component {
         this.props.history.push(ROUTES.ADOPTION_FORM)
     }
 
+    componentDidMount() {
+        this.setState({ loading: true });
+
+        this.props.firebase.pets().on('value', snapshot => {
+            const petsObject = snapshot.val();
+            const petsList = Object.keys(petsObject).map(key => ({
+                ...petsObject[key],
+                uid: key,
+            }));
+
+            this.setState({
+                pets: petsList,
+                loading: false,
+            });
+        });
+    }
+
+    componentWillUnmount() {
+        this.props.firebase.pets().off();
+    }
+
     render() {
-        return (
+        /*return (
             <div className="row">
                 <div className="col-xl-3 col-md-6 mb-4">
                     <div className="card border-0 shadow">
@@ -70,7 +94,31 @@ class PetsList extends Component {
                     </div>
                 </div>
             </div>
-        )
+        )*/
+        const { pets, loading } = this.state;
+
+        return (
+            <div className="row">
+                {loading && <div>Loading ...</div>}
+                <ul>
+                    {pets.map(pet => (
+                        <li key={pet.uid} style={{listStyleType:'none'}}>
+                            <div className="col-xl-3 col-md-6 mb-4">
+                                <div className="card border-0 shadow">
+                                    <img src={pet.photo} className="card-img-top" alt="..." />
+                                    <div className="card-body text-center">
+                                        <h5 className="card-title mb-0">{pet.name}</h5>
+                                        <div className="card-text text-black-50">Meses de nacido/a: {pet.age}</div>
+                                        <div className="card-text text-black-50">Raza: {pet.breed}</div>
+                                        <button className="btn btn-lg btn-success btn-block text-uppercase" type="submit">Adoptar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        );
     }
 }
 

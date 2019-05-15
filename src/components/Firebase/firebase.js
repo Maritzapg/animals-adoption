@@ -81,7 +81,7 @@ class Firebase {
     users = () => this.db.ref('users');
 
     // *** Pet API ***
-    pet = uid => this.db.ref(`pets/${uid}`);
+    pet = (uid) => this.db.ref(`pets/${uid}`);
 
     pets = () => this.db.ref('pets');
   }

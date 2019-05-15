@@ -17,7 +17,7 @@ class UploadFile extends Component {
                 <input type="file" onChange={this.props.onUpload}/>
             </div>
         );
-    }
+    }   
 }
 
 export default UploadFile;

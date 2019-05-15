@@ -21,6 +21,7 @@ const INITIAL_STATE = {
     photo: '',
     gender: 'Hembra',
     isAdopted: false,
+    owner: '',
     uploadValue:null
 };
 
@@ -34,14 +35,16 @@ class RegistrationFormBase extends Component {
     }
 
     onSubmit = event => {
-        const { name, breed, age, type, photo, gender, isAdopted } = this.state;
+        const { name, breed, age, type, photo, gender, isAdopted, owner } = this.state;
 
         let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
         let today  = new Date();
         const date = today.toLocaleDateString("es", options)
 
         // Create a pet in your Firebase realtime database
-        this.props.firebase.pet().push({
+        var newRef = firebase.database().ref(`/pets`)
+        
+        newRef.push().set({
             name,
             breed,
             age,
@@ -49,6 +52,7 @@ class RegistrationFormBase extends Component {
             photo,
             gender,
             isAdopted,
+            owner,
             upload_date: date,
         })
         .then(() => {
@@ -68,7 +72,6 @@ class RegistrationFormBase extends Component {
         //let today  = new Date();
 
         const file = event.target.files[0]
-        debugger
         const storageRef = firebase.storage().ref(`/photos/${file.name}`)
         const task = storageRef.put(file);
 
@@ -184,11 +187,11 @@ class RegistrationFormBase extends Component {
                                             type="number" 
                                             id="inputAge" 
                                             className="form-control" 
-                                            placeholder="Edad" 
+                                            placeholder="Edad en meses" 
                                             min="0"
                                             required autoFocus
                                         />
-                                        <label htmlFor="inputAge">Edad</label>
+                                        <label htmlFor="inputAge">Edad en meses</label>
                                     </div>
 
                                     <div className="form-label-group">
