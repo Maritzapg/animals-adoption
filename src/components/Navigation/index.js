@@ -29,13 +29,22 @@ const NavigationAuth = ({ authUser }) => (
                             <span className="sr-only">(current)</span>
                         </a> */}
                     </li>
+                    
                     <li className="nav-item">
                         <Link className="nav-link" to={ROUTES.HOME}>Home</Link>
-                        {/* <a className="nav-link" href="#">Cuidados de las mascotas</a> */}
+                        {/* <a className="nav-link" href="#">Cuidados de las mascotas</a>  */}
                     </li>
-                    <li className="nav-item">
-                        <Link className="nav-link" to={ROUTES.PETS}>Mascotas</Link>
-                    </li>
+                    
+                    {authUser.roles.includes(ROLES.ADMIN) && (
+                        <li className="nav-item">
+                            <Link className="nav-link" to={ROUTES.PETS}>Mascotas</Link>
+                        </li>
+                    )}
+                    {!authUser.roles.includes(ROLES.ADMIN) && (
+                        <li className="nav-item">
+                            <Link className="nav-link" to={ROUTES.PETS_USER}>Mascotas</Link>
+                        </li>
+                    )}
                     <li className="nav-item">
                         <Link className="nav-link" to={ROUTES.ACCOUNT}>Cuenta</Link>
                         {/* <a className="nav-link" href="#">Mascotas para adoptar</a> */}
@@ -68,7 +77,7 @@ const NavigationNonAuth = () => (
                         <a className="nav-link" href="#">Cuidados de las mascotas</a> 
                     </li> 
                     <li className="nav-item">
-                        <Link className="nav-link" to={ROUTES.PETS}>Mascotas para adoptar</Link>
+                        <Link className="nav-link" to={ROUTES.PETS_USER}>Mascotas para adoptar</Link>
                     </li>
                     <li className="nav-item">
                         <Link className="nav-link" to={ROUTES.SIGN_IN}>Iniciar sesion</Link>

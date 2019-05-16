@@ -7,5 +7,6 @@ export const PASSWORD_FORGET = '/pw-forget';
 export const ADMIN = '/admin';
 export const ADMIN_DETAILS = '/admin/:id';
 export const PETS = '/pets';
+export const PETS_USER = '/pets-user';
 export const ADOPTION_FORM = '/adoption-form';
 export const REGISTER_PET = '/register-pet';

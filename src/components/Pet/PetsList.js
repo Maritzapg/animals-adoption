@@ -10,8 +10,7 @@ class PetsList extends Component {
         }
     }
 
-    onClick()
-    {
+    onClick() {
         this.props.history.push(ROUTES.ADOPTION_FORM)
     }
 
@@ -98,24 +97,122 @@ class PetsList extends Component {
         const { pets, loading } = this.state;
 
         return (
-            <div className="row">
-                {loading && <div>Loading ...</div>}
+            // <div className="row" style={{columnCount:2}}>
+            //     {loading && <div>Loading ...</div>}
+            //     <ul>
+            //         {pets.map(pet => (
+            //             <li key={pet.uid} style={{listStyleType:'none'}}>
+            //                 <div className="col-xl-3 col-md-6 mb-4">
+            //                     <div className="card border-0 shadow">
+            //                         <img src={pet.photo} className="card-img-top" alt="..." />
+            //                         <div className="card-body text-center">
+            //                             <h5 className="card-title mb-0">{pet.name}</h5>
+            //                             <div className="card-text text-black-50">Meses de nacido/a: {pet.age}</div>
+            //                             <div className="card-text text-black-50">Raza: {pet.breed}</div>
+            //                             <button className="btn btn-lg btn-success btn-block text-uppercase" type="submit">Adoptar</button>
+            //                         </div>
+            //                     </div>
+            //                 </div>
+            //             </li>
+            //         ))}
+            //     </ul>
+            // </div>
+            <div className="container">
+
+                <hr />
+
+                {loading && <div>Cargando ...</div>}
                 <ul>
                     {pets.map(pet => (
-                        <li key={pet.uid} style={{listStyleType:'none'}}>
-                            <div className="col-xl-3 col-md-6 mb-4">
-                                <div className="card border-0 shadow">
-                                    <img src={pet.photo} className="card-img-top" alt="..." />
-                                    <div className="card-body text-center">
-                                        <h5 className="card-title mb-0">{pet.name}</h5>
-                                        <div className="card-text text-black-50">Meses de nacido/a: {pet.age}</div>
-                                        <div className="card-text text-black-50">Raza: {pet.breed}</div>
-                                        <button className="btn btn-lg btn-success btn-block text-uppercase" type="submit">Adoptar</button>
+                        !pet.isAdopted ? (
+                            <li key={pet.uid} style={{listStyleType:'none', marginLeft:'-3.5%'}} >
+                                <div className="row">
+                                    <div className="col-md-7">
+                                        <a href="#">
+                                            <img className="img-fluid rounded mb-3 mb-md-0" src={pet.photo} alt="" style={{maxWidth:'600px', maxHeight:'400px'}}/>
+                                        </a>
+                                    </div>
+                                    <div className="col-md-5">
+                                        <h3>{pet.name}</h3>
+                                        <p>Edad en meses: {pet.age}</p>
+                                        <p>Raza: {pet.breed}</p>
+                                        <a className="btn btn-secondary" href="#">Modificar información</a>
+                                        <br/><br/>
+                                        <a className="btn btn-secondary" href="#">Remover</a>
                                     </div>
                                 </div>
-                            </div>
-                        </li>
+                                <hr/>
+                            </li>
+                        ) :
+                        (
+                            <li key={pet.uid} style={{listStyleType:'none'}}>
+                                <div className="row">
+                                    <div className="col-md-7">
+                                        <a href="#">
+                                            <img className="img-fluid rounded mb-3 mb-md-0" src="https://images.unsplash.com/photo-1472491235688-bdc81a63246e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" alt="" />
+                                        </a>
+                                    </div>
+                                    <div className="col-md-5">
+                                        <h3>Lola</h3>
+                                        <p>Pendiente por adopción</p>
+                                        <a className="btn btn-primary" href="#">Ver solicitudes de adopción</a>
+                                        <br/><br/>
+                                        <a className="btn btn-secondary" href="#">Remover</a>
+                                    </div>
+                                </div>
+                            </li>
+                        )
+                        // <li key={pet.uid} style={{listStyleType:'none'}}>
+                        // <div class="row">
+                        //     <div class="col-md-7">
+                        //         <a href="#">
+                        //             <img class="img-fluid rounded mb-3 mb-md-0" src="https://images.unsplash.com/photo-1450778869180-41d0601e046e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" alt="" />
+                        //         </a>
+                        //     </div>
+                        //     <div class="col-md-5">
+                        //         <h3>koky</h3>
+                        //         <p>Adoptado por:</p>
+                        //         <p> Camila Restropo</p>
+                        //         <a class="btn btn-secondary" href="#">Modificar información</a>
+                        //     </div>
+                        // </div>
+                        //     <div className="col-xl-3 col-md-6 mb-4">
+                        //         <div className="card border-0 shadow">
+                        //             <img src={pet.photo} className="card-img-top" alt="..." />
+                        //             <div className="card-body text-center">
+                        //                 <h5 className="card-title mb-0">{pet.name}</h5>
+                        //                 <div className="card-text text-black-50">Meses de nacido/a: {pet.age}</div>
+                        //                 <div className="card-text text-black-50">Raza: {pet.breed}</div>
+                        //                 <button className="btn btn-lg btn-success btn-block text-uppercase" type="submit">Adoptar</button>
+                        //             </div>
+                        //         </div>
+                        //     </div>
+                        // </li>
                     ))}
+                </ul>
+
+                <ul className="pagination justify-content-center">
+                    <li className="page-item">
+                        <a className="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span className="sr-only">Previous</span>
+                        </a>
+                    </li>
+                    <li className="page-item">
+                        <a className="page-link" href="#">1</a>
+                    </li>
+                    <li className="page-item">
+                        <a className="page-link" href="#">2</a>
+                    </li>
+                    <li className="page-item">
+                        <a className="page-link" href="#">3</a>
+                    </li>
+                    <li className="page-item">
+                        <a className="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span className="sr-only">Next</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         );

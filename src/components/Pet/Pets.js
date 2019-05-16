@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import * as ROUTES from '../../constants/routes';
 import { withFirebase } from '../Firebase';
 import PetsListBase from './PetsList'
+import { withAuthorization, withEmailVerification } from '../Session';
+import { compose } from 'recompose';
 
 class Pets extends Component {
     constructor(props) {
@@ -50,6 +52,13 @@ class Pets extends Component {
     }
 }
 
+const condition = authUser => !!authUser;
+
 const PetsList = withFirebase(PetsListBase);
 
-export default Pets; 
+//export default Pets; 
+
+export default compose(
+    withEmailVerification,
+    withAuthorization(condition),
+  )(Pets);

@@ -232,7 +232,7 @@ class SignUpFormBase extends Component {
                                         {error && <p>{error.message}</p>}
                                         <hr className="my-4" />
 
-                                        <button className="btn btn-lg btn-google btn-block text-uppercase" type="submit"><i className="fab fa-google mr-2"></i> Regístrate con Google </button>
+                                        {/* <button className="btn btn-lg btn-google btn-block text-uppercase" type="submit"><i className="fab fa-google mr-2"></i> Regístrate con Google </button> */}
                                     </form>
                                 </div>
                             </div>

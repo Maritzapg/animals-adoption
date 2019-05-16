@@ -211,7 +211,7 @@ class UserItemBase extends Component {
                                 onClick={this.onSendPasswordResetEmail}
                             >
                                 Send Password Reset
-              </button>
+                            </button>
                         </span>
                     </div>
                 )}
