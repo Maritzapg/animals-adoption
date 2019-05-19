@@ -67,10 +67,7 @@ import * as ROUTES from '../../constants/routes';
 }*/
 
 const AdminPage = () => (
-    <div>
-        <h1>Admin</h1>
-        <p>The Admin Page is accessible by every signed in admin user.</p>
-
+    <div >
         <Switch>
             <Route exact path={ROUTES.ADMIN_DETAILS} component={UserItem} />
             <Route exact path={ROUTES.ADMIN} component={UserList} />
@@ -113,36 +110,89 @@ class UserListBase extends Component {
 
         return (
             <div>
-                <h2>Users</h2>
-                {loading && <div>Loading ...</div>}
-                <ul>
-                    {users.map(user => (
-                        <li key={user.uid}>
-                            {/*<span>
-                                <strong>ID:</strong> {user.uid}
-                            </span>*/}
-                            {'    '}
-                            <span>
-                                <strong>e-mail:</strong> {user.email}
-                            </span>
-                            {'    '}
-                            <span>
-                                <strong>Username:</strong> {user.username}
-                            </span>
-                            {'    '}
-                            <span>
-                                <Link
-                                    to={{
-                                        pathname: `${ROUTES.ADMIN}/${user.uid}`,
-                                        state: { user },
-                                    }}
-                                >
-                                    Details
-                                </Link>
-                            </span>
-                        </li>
-                    ))}
-                </ul>
+                
+                <div className="container-fluid">
+                    <div className="row no-gutter">
+                        <div className="col-md-8 col-lg-6">
+                            <div className="d-flex align-items-right py-3">
+                                <div className="container">
+                                    <div className="row">
+                                        <div className="col-md-9 col-lg-8 mx-auto">
+                                            <form>
+                                                <div className="form-label-group">
+                                                    <input type="text" id="inputUserame" className="form-control" placeholder="Username" required autoFocus />
+                                                    <label htmlFor="inputUserame">Buscar</label>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <table className="table">
+                    {loading && <label>Loading ...</label>}
+                    <br/>
+                    <div className="container-fluid" style={{display:'table'}}>
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Nombre de usuario</th>
+                                <th scope="col">Correo</th>
+                                <th scope="col">Rol</th>
+                                <th scope="col">Detalle</th>
+                                <th scope="col">Eliminar usuario</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            {users.map((user, i) => (
+                                <tr key={user.uid}>
+                                    <th scope="row">{i + 1}</th>
+                                    <td>{user.username}</td>
+                                    <td>{user.email}</td>
+                                    <td>{user.roles ? user.roles[0] : 'Usuario'}</td>
+                                    <td>
+                                        <Link className="btn btn-info"
+                                            to={{
+                                                pathname: `${ROUTES.ADMIN}/${user.uid}`,
+                                                state: { user },
+                                            }}
+                                        >
+                                            Ver más
+                                        </Link>
+
+                                        {/* <button className="btn btn-info" type="submit">Ver más</button> */}
+                                    </td>
+                                    <td><button href="#victorModal" role="button" data-toggle="modal" className="btn btn-danger" type="submit">Eliminar</button></td>
+                                    <div id="victorModal" className="modal fade">
+                                        <div className="modal-dialog">
+                                            <div className="modal-content">
+                                                <div className="modal-header">
+                                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                    <div className="modal-body">
+                                                        <p>¿Seguro que desea eliminar el usuario?</p>
+                                                    </div>
+                                                    <div className="modal-footer">
+                                                        <button type="button" className="btn btn-danger">Eliminar</button>
+                                                        <button type="button" className="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </tr>
+                            ))}
+
+                        </tbody>
+                    </div>
+                </table>
             </div>
         );
     }

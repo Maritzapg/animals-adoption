@@ -264,4 +264,42 @@ code {
   height: -webkit-fill-available;
 }
 
+/*Formulario de preguntas*/
+.bg-image-cuestionario {
+  background-image: url('https://images.unsplash.com/photo-1552053831-71594a27632d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60');
+  background-size: cover;
+  background-position: center;
+}
+
 /*Registro de mascota*/
+.left {
+    padding-left: 5px;
+    padding-top: 5px;
+    margin-left: 5px;
+    float: left;
+    position: relative;
+    width: 70%;
+    height: auto;
+}
+
+.right {
+    padding-top: 5px;
+    padding-left: 5px;
+    margin-left: 5px;
+    position: relative;
+    float: left;
+    width: 55%;
+    height: auto;
+    border: steelblue solid 1px;
+}
+
+.centerrr {
+    padding-top: 5px;
+    padding-left: 5px;
+    margin-left: 5px;
+    float: left;
+    width: 100%;
+    height: auto;
+    border: steelblue solid 1px;
+}
+

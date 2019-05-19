@@ -9,10 +9,11 @@ import PasswordForgetPage from '../PasswordForget';
 import HomePage from '../Home';
 import AccountPage from '../Account';
 import AdminPage from '../Admin';
-import PetsListUser from '../Pet/PetsListUser';
-import Pets from '../Pet/Pets';
-import AdoptionForm from '../Pet/AdoptionForm';
-import RegistrationForm from '../Pet/RegistrationForm';
+import PetsListUser from '../PetsUser/PetsListUser';
+import Pets from '../PetsAdmin/PetsListAdmin';
+import AdoptionForm from '../PetsUser/AdoptionForm';
+import RegistrationForm from '../PetsAdmin/RegistrationForm';
+import PetCare from '../PetCare';
 
 import * as ROUTES from '../../constants/routes';
 import { withAuthentication } from '../Session';
@@ -29,10 +30,11 @@ const App = () => (
             <Route path={ROUTES.HOME} component={HomePage} />
             <Route path={ROUTES.ACCOUNT} component={AccountPage} />
             <Route path={ROUTES.ADMIN} component={AdminPage} />
-            <Route path={ROUTES.PETS} component={Pets} />
+            {/* <Route path={ROUTES.PETS} component={Pets} /> */}
             <Route path={ROUTES.ADOPTION_FORM} component={AdoptionForm} />
             <Route path={ROUTES.REGISTER_PET} component={RegistrationForm} />
             <Route path={ROUTES.PETS_USER} component={PetsListUser} />
+            <Route path={ROUTES.PET_CARE} component={PetCare} />
         </div>
     </Router>
 );

@@ -1,18 +1,22 @@
 import React from 'react';
 import { compose } from 'recompose';
-
-import { withAuthorization, withEmailVerification } from '../Session';
+import { withAuthorization, withEmailVerification, AuthUserContext } from '../Session';
+import * as ROLES from '../../constants/roles';
+import PetsListAdmin from '../PetsAdmin/PetsListAdmin'
+import PetsListUser from '../PetsUser/PetsListUser'
 
 const Home = () => (
-  <div>
-    <h1>Home</h1>
-    <p>The Home Page is accessible by every signed in user.</p>
-  </div>
+    <AuthUserContext.Consumer>
+        {authUser =>
+            authUser.roles.includes(ROLES.ADMIN)?
+            <PetsListAdmin /> : <PetsListUser />
+        }
+  </AuthUserContext.Consumer>
 );
 
 const condition = authUser => !!authUser;
 
 export default compose(
-  withEmailVerification,
-  withAuthorization(condition),
+    withEmailVerification,
+    withAuthorization(condition),
 )(Home);

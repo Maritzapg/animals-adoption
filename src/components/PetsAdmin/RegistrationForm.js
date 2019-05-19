@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import firebase from 'firebase';
 
 import { compose } from 'recompose';
 import { withFirebase } from '../Firebase';
+import { withAuthorization, withEmailVerification } from '../Session';
 import * as ROUTES from '../../constants/routes';
+import * as ROLES from '../../constants/roles';
 import UploadFile from './../uploadFile/UploadFile'
 
 const RegistrationFormPage = () => (
@@ -57,7 +59,7 @@ class RegistrationFormBase extends Component {
         })
         .then(() => {
             this.setState({ ...INITIAL_STATE });
-            this.props.history.push(ROUTES.PETS);
+            this.props.history.push(ROUTES.HOME);
         })
         .catch(error => {
             this.setState({ error });
@@ -238,8 +240,12 @@ class RegistrationFormBase extends Component {
     }
 }
 
+const condition = authUser =>
+    authUser && authUser.roles.includes(ROLES.ADMIN);
+
 const RegistrationForm = compose(
     withRouter,
+    withAuthorization(condition),
     withFirebase,
 )(RegistrationFormBase);
 

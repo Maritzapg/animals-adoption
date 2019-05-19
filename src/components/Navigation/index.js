@@ -31,20 +31,20 @@ const NavigationAuth = ({ authUser }) => (
                     </li>
                     
                     <li className="nav-item">
-                        <Link className="nav-link" to={ROUTES.HOME}>Home</Link>
+                        <Link className="nav-link" to={ROUTES.HOME}>Mascotas</Link>
                         {/* <a className="nav-link" href="#">Cuidados de las mascotas</a>  */}
                     </li>
                     
-                    {authUser.roles.includes(ROLES.ADMIN) && (
+                    {/* {authUser.roles.includes(ROLES.ADMIN) && (
                         <li className="nav-item">
                             <Link className="nav-link" to={ROUTES.PETS}>Mascotas</Link>
                         </li>
-                    )}
-                    {!authUser.roles.includes(ROLES.ADMIN) && (
+                    )} */}
+                    {/* {!authUser.roles.includes(ROLES.ADMIN) && (
                         <li className="nav-item">
                             <Link className="nav-link" to={ROUTES.PETS_USER}>Mascotas</Link>
                         </li>
-                    )}
+                    )} */}
                     <li className="nav-item">
                         <Link className="nav-link" to={ROUTES.ACCOUNT}>Cuenta</Link>
                         {/* <a className="nav-link" href="#">Mascotas para adoptar</a> */}
@@ -55,7 +55,7 @@ const NavigationAuth = ({ authUser }) => (
                             {/* <a className="nav-link" href="#">Iniciar sesion</a> */}
                         </li>
                     )}
-                    <li className="nav-item">
+                    <li className="nav-item" style={{cursor:'pointer'}}>
                         <SignOutButton />
                         {/* <a className="nav-link" href="#">Regístrarse</a> */}
                     </li>
@@ -74,7 +74,7 @@ const NavigationNonAuth = () => (
                         <Link className="nav-link" to={ROUTES.LANDING}>Inicio</Link>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link" href="#">Cuidados de las mascotas</a> 
+                        <Link className="nav-link" to={ROUTES.PET_CARE}>Cuidados de las mascotas</Link> 
                     </li> 
                     <li className="nav-item">
                         <Link className="nav-link" to={ROUTES.PETS_USER}>Mascotas para adoptar</Link>

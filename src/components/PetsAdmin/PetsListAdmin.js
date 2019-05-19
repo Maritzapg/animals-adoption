@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import * as ROUTES from '../../constants/routes';
 import { withFirebase } from '../Firebase';
 import PetsListBase from './PetsList'
@@ -46,7 +45,6 @@ class Pets extends Component {
                     </div>
                     <PetsList history={this.props.history}/>
                 </div>
-                
             </div>
         )
     }
@@ -61,4 +59,4 @@ const PetsList = withFirebase(PetsListBase);
 export default compose(
     withEmailVerification,
     withAuthorization(condition),
-  )(Pets);
+)(Pets);

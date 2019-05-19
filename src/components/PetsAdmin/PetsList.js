@@ -128,7 +128,7 @@ class PetsList extends Component {
                             <li key={pet.uid} style={{listStyleType:'none', marginLeft:'-3.5%'}} >
                                 <div className="row">
                                     <div className="col-md-7">
-                                        <a href="#">
+                                        <a>
                                             <img className="img-fluid rounded mb-3 mb-md-0" src={pet.photo} alt="" style={{maxWidth:'600px', maxHeight:'400px'}}/>
                                         </a>
                                     </div>
@@ -138,17 +138,17 @@ class PetsList extends Component {
                                         <p>Raza: {pet.breed}</p>
                                         <a className="btn btn-secondary" href="#">Modificar información</a>
                                         <br/><br/>
-                                        <a className="btn btn-secondary" href="#">Remover</a>
+                                        <a className="btn btn-danger" href="#">Remover</a>
                                     </div>
                                 </div>
                                 <hr/>
                             </li>
                         ) :
                         (
-                            <li key={pet.uid} style={{listStyleType:'none'}}>
+                            <li key={pet.uid} style={{listStyleType:'none', marginLeft:'-3.5%'}} >
                                 <div className="row">
                                     <div className="col-md-7">
-                                        <a href="#">
+                                        <a>
                                             <img className="img-fluid rounded mb-3 mb-md-0" src="https://images.unsplash.com/photo-1472491235688-bdc81a63246e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" alt="" />
                                         </a>
                                     </div>

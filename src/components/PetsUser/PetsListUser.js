@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import * as ROUTES from '../../constants/routes';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
 import { withFirebase } from '../Firebase';
+import firebase from 'firebase';
 
 const PetsListUserPage = () => (
     <div>
@@ -16,11 +17,33 @@ class PetsListUser extends Component {
         this.state = {
             loading: false,
             pets: [],
+            user:null
         }
     }
+    
+    componentWillMount()
+    {
+        firebase.auth().onAuthStateChanged(user =>
+        {
+            this.setState({ user })
+        })
+    }
 
-    onClick() {
-        this.props.history.push(ROUTES.ADOPTION_FORM)
+    onClick(pet) {
+        this.state.user?
+            this.props.history.push({
+                pathname: `${ROUTES.ADOPTION_FORM}/${pet.uid}`,
+                //search: `${pet.uid}`,
+                state: { pet },
+            })
+            :
+            this.props.history.push(ROUTES.SIGN_IN)
+
+            // this.props.history.push({
+            //     pathname: '/template',
+            //     search: '?query=abc',
+            //     state: { detail: response.data }
+            //   })
     }
 
     componentDidMount() {
@@ -76,7 +99,13 @@ class PetsListUser extends Component {
                                                 <h5 className="card-title mb-0">{pet.name}</h5>
                                                 <div className="card-text text-black-50">Meses de nacido/a: {pet.age}</div>
                                                 <div className="card-text text-black-50">Raza: {pet.breed}</div>
-                                                <button className="btn btn-lg btn-success btn-block text-uppercase" type="submit">Adoptar</button>
+                                                <button 
+                                                    className="btn btn-lg btn-success btn-block text-uppercase" 
+                                                    type="submit"
+                                                    onClick={()=>this.onClick(pet)}
+                                                >
+                                                    Adoptar
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
