@@ -7,6 +7,13 @@ import { withAuthorization, withEmailVerification } from '../Session';
 import * as ROLES from '../../constants/roles';
 import * as ROUTES from '../../constants/routes';
 
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 /*class AdminPage extends Component {
   constructor(props) 
   {
@@ -66,16 +73,6 @@ import * as ROUTES from '../../constants/routes';
   }
 }*/
 
-let style = {
-    boxSizing: 'unset',
-    content: {
-        left: '50%',
-        position: 'fixed',
-        top: '50%',
-        transform: 'translate(-50%,-50%)'
-    }
-};
-
 const AdminPage = () => (
     <div >
         <Switch>
@@ -91,7 +88,10 @@ class UserListBase extends Component {
         this.state = {
             loading: false,
             users: [],
+            open: false,
+            selectedUser: {}
         };
+        this.handleDeleteUser = this.handleDeleteUser.bind(this)
     }
 
     componentDidMount() {
@@ -115,54 +115,43 @@ class UserListBase extends Component {
         this.props.firebase.users().off();
     }
 
-    showPopupDelete()
-    {
+    handleClickOpen = (user) => {
+        this.setState({ open: true, selectedUser: user });
+    }
+
+    handleClose = () => {
+        this.setState({ open: false });
+    }
+
+    handleDeleteUser(){ 
         debugger
-        return(
-            <section style={style.content} className="box_popup">
-                <div className="box_vert">
-                    <div className="row">
-                        <div className="box visible">
-                            <div className="top">
-                                <div className="titular_icon">
-                                    <div className="icon">
-                                        {/* <img src={ require('../../../assets/images/subjectDescription/upload.svg') }
-                                             alt=""/> */}
-                                    </div>
-                                    <p>dsdsdsd}</p>
-                                </div>
-                                {/* <div className="btn_cerrar" onClick={this.onClickClose}>
-                                    <img src={ require('../../../assets/images/iconos/btn_cerrar_popup.svg') } alt=""/>
-                                </div> */}
-                            </div>
-                            <div className="info">
-                                <form onSubmit={this.handleUnitUploadChange}>
-                                    <div className="btn_text"
-                                         style={{cursor: 'auto', marginTop: '-5%', opacity: 'unset'}}>
-                                        <p>frgfb:</p>
-                                        <a target="_blank"
-                                           href="https://d3e5zprszzkroi.cloudfront.net/templates/unit-import-template.docx">
-                                            {/*href="https://s3.amazonaws.com/ser-plus-storage-dev/templates/unit-import-template.docx">*/}
-                                            <span>unit-import-template.docx</span>
-                                        </a>
-                                    </div>
-                                    <div className="box_input full">
-                                        <input className="btn_text" type="file" id="fileToUpload"
-                                              // onChange={this.onChangeInputFile}
-                                               accept=".doc, .docx"
-                                        />
-                                    </div>
-                                  
-                                    <div className="box_botones" style={{marginTop: '8px'}}>
-                                        <div className="box_center">ssfd
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+        this.props.firebase.user(this.state.selectedUser.uid).remove()
+        this.handleClose()
+    }
+
+    showPopupDelete() {
+        return (
+            <Dialog
+                open={this.state.open}
+                onClose={this.handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">Eliminar usuario</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        ¿Seguro que deseas eliminar a {this.state.selectedUser.username}?
+                </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={this.handleDeleteUser} color="primary">
+                        Eliminar
+                    </Button>
+                    <Button onClick={this.handleClose} color="primary" autoFocus>
+                        Cancelar
+                    </Button>
+                </DialogActions>
+            </Dialog>
         )
     }
 
@@ -171,7 +160,7 @@ class UserListBase extends Component {
 
         return (
             <div>
-                
+                {this.showPopupDelete()}
                 <div className="container-fluid">
                     <div className="row no-gutter">
                         <div className="col-md-8 col-lg-6">
@@ -196,8 +185,8 @@ class UserListBase extends Component {
 
                 <table className="table">
                     {loading && <label>Loading ...</label>}
-                    <br/>
-                    <div className="container-fluid" style={{display:'table'}}>
+                    <br />
+                    <div className="container-fluid" style={{ display: 'table' }}>
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
@@ -228,7 +217,7 @@ class UserListBase extends Component {
 
                                         {/* <button className="btn btn-info" type="submit">Ver más</button> */}
                                     </td>
-                                    <td><button onClick={()=>this.showPopupDelete()} role="button" data-toggle="modal" className="btn btn-danger" type="button">Eliminar</button></td>
+                                    <td><button onClick={()=>this.handleClickOpen(user)} role="button" data-toggle="modal" className="btn btn-danger" type="button">Eliminar</button></td>
                                 </tr>
                             ))}
 

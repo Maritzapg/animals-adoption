@@ -1,13 +1,23 @@
 import React, { Component } from 'react';
 import * as ROUTES from '../../constants/routes';
 
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 class PetsList extends Component {
     constructor(props) {
         super(props)
         this.state = {
             loading: false,
             pets: [],
+            open: false,
+            selectedPet: {}
         }
+        this.handleDeletePet = this.handleDeletePet.bind(this)
     }
 
     onClick() {
@@ -35,36 +45,56 @@ class PetsList extends Component {
         this.props.firebase.pets().off();
     }
 
+    handleClickOpen = (pet) => {
+        debugger
+        this.setState({ open: true, selectedPet: pet });
+    }
+
+    handleClose = () => {
+        this.setState({ open: false });
+    }
+
+    handleDeletePet(){ 
+        this.props.firebase.pet(this.state.selectedPet.uid).remove()
+        this.handleClose()
+    }
+
+    showPopupDelete() {
+        return (
+            <Dialog
+                open={this.state.open}
+                onClose={this.handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">Eliminar mascota</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        ¿Seguro que deseas eliminar a {this.state.selectedPet.name}?
+                </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={this.handleDeletePet} color="primary">
+                        Eliminar
+                    </Button>
+                    <Button onClick={this.handleClose} color="primary" autoFocus>
+                        Cancelar
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        )
+    }
+
     render() {
         const { pets, loading } = this.state;
 
         return (
-            // <div className="row" style={{columnCount:2}}>
-            //     {loading && <div>Loading ...</div>}
-            //     <ul>
-            //         {pets.map(pet => (
-            //             <li key={pet.uid} style={{listStyleType:'none'}}>
-            //                 <div className="col-xl-3 col-md-6 mb-4">
-            //                     <div className="card border-0 shadow">
-            //                         <img src={pet.photo} className="card-img-top" alt="..." />
-            //                         <div className="card-body text-center">
-            //                             <h5 className="card-title mb-0">{pet.name}</h5>
-            //                             <div className="card-text text-black-50">Meses de nacido/a: {pet.age}</div>
-            //                             <div className="card-text text-black-50">Raza: {pet.breed}</div>
-            //                             <button className="btn btn-lg btn-success btn-block text-uppercase" type="submit">Adoptar</button>
-            //                         </div>
-            //                     </div>
-            //                 </div>
-            //             </li>
-            //         ))}
-            //     </ul>
-            // </div>
             <div className="container">
-
+                {this.showPopupDelete()}
                 <hr />
 
                 {loading && <div>Cargando ...</div>}
-                
+
                 <ul>
                     {pets.map(pet => (
                         !pet.isAdopted ? (
@@ -81,7 +111,7 @@ class PetsList extends Component {
                                         <p>Raza: {pet.breed}</p>
                                         <a className="btn btn-secondary" href="#">Modificar información</a>
                                         <br/><br/>
-                                        <a className="btn btn-danger" href="#">Remover</a>
+                                        <a className="btn btn-danger" onClick={()=>this.handleClickOpen(pet)} style={{cursor:'pointer', color:'white'}}>Remover</a>
                                     </div>
                                 </div>
                                 <hr/>
