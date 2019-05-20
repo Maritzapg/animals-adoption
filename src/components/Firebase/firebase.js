@@ -82,6 +82,11 @@ class Firebase {
     pet = (uid) => this.db.ref(`pets/${uid}`);
 
     pets = () => this.db.ref('pets');
+
+    // *** Form adoption API ***
+    adoptionForm = (uid) => this.db.ref(`adoptionForms/${uid}`);
+
+    adoptionForms = () => this.db.ref('adoptionForms');
 }
 
 export default Firebase;

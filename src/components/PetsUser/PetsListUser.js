@@ -17,8 +17,10 @@ class PetsListUser extends Component {
         this.state = {
             loading: false,
             pets: [],
-            user:null
+            user:null,
+            adoptionFormsByUser: []
         }
+        this.isFormFilled = this.isFormFilled.bind(this)
     }
     
     componentWillMount()
@@ -26,24 +28,47 @@ class PetsListUser extends Component {
         firebase.auth().onAuthStateChanged(user =>
         {
             this.setState({ user })
+            const adoptionFormsByUser = []
+
+            this.props.firebase.adoptionForms().on('value', snapshot => {
+                const adoptionFormsObject = snapshot.val();
+                debugger
+                const adoptionFormsList = Object.keys(adoptionFormsObject).map(key => ({
+                    ...adoptionFormsObject[key],
+                    uid: key,
+                }))
+
+                if(user)
+                {
+                    adoptionFormsList.map((adoptionForm) => {
+                        debugger
+                        if(adoptionForm.userUid === user.uid)
+                            adoptionFormsByUser.push(adoptionForm)
+                    })
+                }
+                
+                this.setState({
+                    adoptionFormsByUser
+                   // loading: false,
+                });
+            });
         })
     }
 
     onClick(pet) {
-        this.state.user?
+        
+        if(this.state.user)
+        {
+            const userUid = this.state.user.uid
+            
             this.props.history.push({
-                pathname: `${ROUTES.ADOPTION_FORM}/${pet.uid}`,
-                //search: `${pet.uid}`,
-                state: { pet },
+                pathname: `${ROUTES.ADOPTION_FORM}/${pet.uid}/${this.state.user.uid}`,
+                //search: `${user.uid}`,
+                state: { pet, userUid },
             })
-            :
+        }
+        else
             this.props.history.push(ROUTES.SIGN_IN)
-
-            // this.props.history.push({
-            //     pathname: '/template',
-            //     search: '?query=abc',
-            //     state: { detail: response.data }
-            //   })
     }
 
     componentDidMount() {
@@ -73,6 +98,18 @@ class PetsListUser extends Component {
         this.props.firebase.pets().off();
     }
 
+    isFormFilled(pet)
+    {
+        if(this.state.adoptionFormsByUser.length > 0)
+        {
+            this.state.adoptionFormsByUser.map((adoptionForm) => {
+                if(adoptionForm.petUid === pet.uid)
+                    return true
+            })
+        }
+        else return false
+    }
+
     render() {
 
         const { pets, loading } = this.state;
@@ -99,7 +136,7 @@ class PetsListUser extends Component {
                                                 <h5 className="card-title mb-0">{pet.name}</h5>
                                                 <div className="card-text text-black-50">Meses de nacido/a: {pet.age}</div>
                                                 <div className="card-text text-black-50">Raza: {pet.breed}</div>
-                                                <button 
+                                                <button disabled={this.isFormFilled(pet)}
                                                     className="btn btn-lg btn-success btn-block text-uppercase" 
                                                     type="submit"
                                                     onClick={()=>this.onClick(pet)}

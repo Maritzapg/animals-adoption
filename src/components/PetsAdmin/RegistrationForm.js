@@ -70,9 +70,6 @@ class RegistrationFormBase extends Component {
 
     handleUpload = (event) =>
     {
-        //let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        //let today  = new Date();
-
         const file = event.target.files[0]
         const storageRef = firebase.storage().ref(`/photos/${file.name}`)
         const task = storageRef.put(file);
@@ -85,25 +82,6 @@ class RegistrationFormBase extends Component {
                 task.then(snapshot => snapshot.ref.getDownloadURL())
                     .then((url) => {
                         this.setState({photo: url})
-                        //const date = today.toLocaleDateString("es", options)
-                        //let str = this.state.user.email;
-                        //let displayName = str.split("@");
-                        // const  record = {
-                        //     pet:{
-                        //         name: this.state.user.photoURL,
-                        //         breed: this.state.user.displayName,
-                        //         //uid: this.state.user.uid,
-                        //         age: this.state.user.email,
-                        //         type: this.state.user.email,
-                        //         photo: url,
-                        //         upload_date: date,
-                        //         isAdopted: false
-                        //     }
-                        // }
-
-                        // const dbRef = this.props.firebase.database().ref('pets')
-                        // const newPicture = dbRef.push()
-                        // newPicture.set(record)
                     })
                     .catch(console.error);
             }

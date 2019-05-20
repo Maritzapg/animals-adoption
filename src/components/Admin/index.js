@@ -66,6 +66,16 @@ import * as ROUTES from '../../constants/routes';
   }
 }*/
 
+let style = {
+    boxSizing: 'unset',
+    content: {
+        left: '50%',
+        position: 'fixed',
+        top: '50%',
+        transform: 'translate(-50%,-50%)'
+    }
+};
+
 const AdminPage = () => (
     <div >
         <Switch>
@@ -105,6 +115,57 @@ class UserListBase extends Component {
         this.props.firebase.users().off();
     }
 
+    showPopupDelete()
+    {
+        debugger
+        return(
+            <section style={style.content} className="box_popup">
+                <div className="box_vert">
+                    <div className="row">
+                        <div className="box visible">
+                            <div className="top">
+                                <div className="titular_icon">
+                                    <div className="icon">
+                                        {/* <img src={ require('../../../assets/images/subjectDescription/upload.svg') }
+                                             alt=""/> */}
+                                    </div>
+                                    <p>dsdsdsd}</p>
+                                </div>
+                                {/* <div className="btn_cerrar" onClick={this.onClickClose}>
+                                    <img src={ require('../../../assets/images/iconos/btn_cerrar_popup.svg') } alt=""/>
+                                </div> */}
+                            </div>
+                            <div className="info">
+                                <form onSubmit={this.handleUnitUploadChange}>
+                                    <div className="btn_text"
+                                         style={{cursor: 'auto', marginTop: '-5%', opacity: 'unset'}}>
+                                        <p>frgfb:</p>
+                                        <a target="_blank"
+                                           href="https://d3e5zprszzkroi.cloudfront.net/templates/unit-import-template.docx">
+                                            {/*href="https://s3.amazonaws.com/ser-plus-storage-dev/templates/unit-import-template.docx">*/}
+                                            <span>unit-import-template.docx</span>
+                                        </a>
+                                    </div>
+                                    <div className="box_input full">
+                                        <input className="btn_text" type="file" id="fileToUpload"
+                                              // onChange={this.onChangeInputFile}
+                                               accept=".doc, .docx"
+                                        />
+                                    </div>
+                                  
+                                    <div className="box_botones" style={{marginTop: '8px'}}>
+                                        <div className="box_center">ssfd
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        )
+    }
+
     render() {
         const { users, loading } = this.state;
 
@@ -140,7 +201,7 @@ class UserListBase extends Component {
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">Nombre de usuario</th>
+                                <th scope="col">Usuario</th>
                                 <th scope="col">Correo</th>
                                 <th scope="col">Rol</th>
                                 <th scope="col">Detalle</th>
@@ -167,26 +228,7 @@ class UserListBase extends Component {
 
                                         {/* <button className="btn btn-info" type="submit">Ver más</button> */}
                                     </td>
-                                    <td><button href="#victorModal" role="button" data-toggle="modal" className="btn btn-danger" type="submit">Eliminar</button></td>
-                                    <div id="victorModal" className="modal fade">
-                                        <div className="modal-dialog">
-                                            <div className="modal-content">
-                                                <div className="modal-header">
-                                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                    <div className="modal-body">
-                                                        <p>¿Seguro que desea eliminar el usuario?</p>
-                                                    </div>
-                                                    <div className="modal-footer">
-                                                        <button type="button" className="btn btn-danger">Eliminar</button>
-                                                        <button type="button" className="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
+                                    <td><button onClick={()=>this.showPopupDelete()} role="button" data-toggle="modal" className="btn btn-danger" type="button">Eliminar</button></td>
                                 </tr>
                             ))}
 
