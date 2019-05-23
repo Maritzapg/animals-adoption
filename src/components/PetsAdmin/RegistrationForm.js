@@ -32,11 +32,21 @@ class RegistrationFormBase extends Component {
         super(props)
 
         this.state = {
-            ...INITIAL_STATE
+            //...INITIAL_STATE,
+            name: this.props.location.state!==undefined?this.props.location.state.pet.name:'',
+            breed: this.props.location.state!==undefined?this.props.location.state.pet.breed:'',
+            age: this.props.location.state!==undefined?this.props.location.state.pet.age:0,
+            type: this.props.location.state!==undefined?this.props.location.state.pet.type:'Gato',
+            photo: this.props.location.state!==undefined?this.props.location.state.pet.photo:'',
+            gender: this.props.location.state!==undefined?this.props.location.state.pet.gender:'Hembra',
+            isAdopted: this.props.location.state!==undefined?this.props.location.state.pet.isAdopted:false,
+            owner: '',
+            uploadValue:null
         }
+        this.onSubmit = this.onSubmit.bind(this)
     }
 
-    onSubmit = event => {
+    onSubmit(event){
         const { name, breed, age, type, photo, gender, isAdopted, owner } = this.state;
 
         let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -44,26 +54,49 @@ class RegistrationFormBase extends Component {
         const date = today.toLocaleDateString("es", options)
 
         // Create a pet in your Firebase realtime database
-        var newRef = firebase.database().ref(`/pets`)
-        
-        newRef.push().set({
-            name,
-            breed,
-            age,
-            type,
-            photo,
-            gender,
-            isAdopted,
-            owner,
-            upload_date: date,
-        })
-        .then(() => {
-            this.setState({ ...INITIAL_STATE });
-            this.props.history.push(ROUTES.HOME);
-        })
-        .catch(error => {
-            this.setState({ error });
-        });
+        if(this.props.location.state!==undefined)
+        {
+            this.props.firebase.pet(this.props.location.state.pet.uid).set({
+                name,
+                breed,
+                age,
+                type,
+                photo,
+                gender,
+                isAdopted,
+                owner,
+                upload_date: date,
+            })
+            .then(() => {
+                this.setState({ ...INITIAL_STATE });
+                this.props.history.push(ROUTES.HOME);
+            })
+            .catch(error => {
+                this.setState({ error });
+            });
+        }
+        else
+        {
+            var newRef = firebase.database().ref(`/pets`)
+            newRef.push().set({
+                name,
+                breed,
+                age,
+                type,
+                photo,
+                gender,
+                isAdopted,
+                owner,
+                upload_date: date,
+            })
+            .then(() => {
+                this.setState({ ...INITIAL_STATE });
+                this.props.history.push(ROUTES.HOME);
+            })
+            .catch(error => {
+                this.setState({ error });
+            });
+        }
 
         event.preventDefault();
     }
@@ -117,11 +150,11 @@ class RegistrationFormBase extends Component {
                             <div className=" d-none d-md-flex">
                             </div>
                             <div className="card-body">
-                                <h5 className="card-title text-center">Registrar mascota</h5>
+                                <h5 className="card-title text-center">{this.props.location.state!==undefined?'Editar mascota':'Registrar mascota'}</h5>
                                 <form onSubmit={this.onSubmit} className="form-signin">
 
                                     <div className="form-label-group">
-                                        <img className="mx-auto d-block" src="https://images.unsplash.com/photo-1424709746721-b8fd0ff52499?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" alt="" />
+                                        <img className="mx-auto d-block" src={this.state.photo} alt="" style={{maxHeight:'300px', maxWidth:'300px'}}/>
                                     </div>
 
                                     {/* <input className="btn btn-lg btn-outline-success btn-block text-uppercase" type="file"/> */}

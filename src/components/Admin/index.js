@@ -123,7 +123,7 @@ class UserListBase extends Component {
         this.setState({ open: false });
     }
 
-    handleDeleteUser(){ 
+    handleDeleteUser() {
         debugger
         this.props.firebase.user(this.state.selectedUser.uid).remove()
         this.handleClose()
@@ -217,7 +217,7 @@ class UserListBase extends Component {
 
                                         {/* <button className="btn btn-info" type="submit">Ver más</button> */}
                                     </td>
-                                    <td><button onClick={()=>this.handleClickOpen(user)} role="button" data-toggle="modal" className="btn btn-danger" type="button">Eliminar</button></td>
+                                    <td><button onClick={() => this.handleClickOpen(user)} role="button" data-toggle="modal" className="btn btn-danger" type="button">Eliminar</button></td>
                                 </tr>
                             ))}
 
@@ -269,31 +269,50 @@ class UserItemBase extends Component {
 
         return (
             <div>
-                <h2>User ({this.props.match.params.id})</h2>
                 {loading && <div>Loading ...</div>}
 
                 {user && (
-                    <div>
-                        {/*<span>
-                        <strong>ID:</strong> {user.uid}
-                        </span>*/}
-                        {'    '}
-                        <span>
-                            <strong>e-mail:</strong> {user.email}
-                        </span>
-                        {'    '}
-                        <span>
-                            <strong>Username:</strong> {user.username}
-                        </span>
-                        <br />
-                        <span>
-                            <button
-                                type="button"
-                                onClick={this.onSendPasswordResetEmail}
-                            >
-                                Send Password Reset
-                            </button>
-                        </span>
+                    <div className="container-fluid">
+                        <div className="row no-gutter">
+                            <div className="d-none d-md-flex col-md-4 col-lg-6 bg-image2"></div>
+                            <div className="col-md-8 col-lg-6">
+                                <div className="login d-flex align-items-center py-5">
+                                    <div className="container">
+                                        <div className="row">
+                                            <div className="col-md-9 col-lg-8 mx-auto">
+                                                <h3 className="login-heading mb-4 text-uppercase" align="center">Detalles de usuario</h3>
+                                                <form>
+                                                    <div className="form-label-group">
+                                                        <h4 className="login-heading mb-4 align-items-center" align="center">Usuario</h4>
+                                                        <h6 className="login-heading mb-4 align-items-center" align="center">{user.username}</h6>
+                                                    </div>
+                                                    <hr />
+                                                    <div className="form-label-group">
+                                                        <h4 className="login-heading mb-4 align-items-center" align="center">Correo</h4>
+                                                        <h6 className="login-heading mb-4 align-items-center" align="center">{user.email}</h6>
+                                                    </div>
+                                                    <hr />
+
+                                                    <div className="form-label-group">
+                                                        <h4 className="login-heading mb-4 align-items-center" align="center">Uid</h4>
+                                                        <h6 className="login-heading mb-4 align-items-center" align="center">{this.props.match.params.id}</h6>
+                                                    </div>
+                                                    <hr/> 
+
+                                                    <button
+                                                        className="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2"
+                                                        type="button"
+                                                        onClick={this.onSendPasswordResetEmail}
+                                                    >
+                                                        Enviar reseteo de la constraseña
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 )}
             </div>

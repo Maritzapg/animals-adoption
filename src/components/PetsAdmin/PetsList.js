@@ -85,6 +85,14 @@ class PetsList extends Component {
         )
     }
 
+    onClick(pet) 
+    {
+        this.props.history.push({
+            pathname: `${ROUTES.REGISTER_PET}/${pet.uid}`,
+            state: { pet }
+        })
+    }
+
     render() {
         const { pets, loading } = this.state;
 
@@ -109,7 +117,7 @@ class PetsList extends Component {
                                         <h3>{pet.name}</h3>
                                         <p>Edad en meses: {pet.age}</p>
                                         <p>Raza: {pet.breed}</p>
-                                        <a className="btn btn-secondary" href="#">Modificar información</a>
+                                        <a className="btn btn-secondary" onClick={()=>this.onClick(pet)} style={{cursor:'pointer', color:'white'}}>Modificar información</a>
                                         <br/><br/>
                                         <a className="btn btn-danger" onClick={()=>this.handleClickOpen(pet)} style={{cursor:'pointer', color:'white'}}>Remover</a>
                                     </div>
@@ -135,32 +143,6 @@ class PetsList extends Component {
                                 </div>
                             </li>
                         )
-                        // <li key={pet.uid} style={{listStyleType:'none'}}>
-                        // <div class="row">
-                        //     <div class="col-md-7">
-                        //         <a href="#">
-                        //             <img class="img-fluid rounded mb-3 mb-md-0" src="https://images.unsplash.com/photo-1450778869180-41d0601e046e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" alt="" />
-                        //         </a>
-                        //     </div>
-                        //     <div class="col-md-5">
-                        //         <h3>koky</h3>
-                        //         <p>Adoptado por:</p>
-                        //         <p> Camila Restropo</p>
-                        //         <a class="btn btn-secondary" href="#">Modificar información</a>
-                        //     </div>
-                        // </div>
-                        //     <div className="col-xl-3 col-md-6 mb-4">
-                        //         <div className="card border-0 shadow">
-                        //             <img src={pet.photo} className="card-img-top" alt="..." />
-                        //             <div className="card-body text-center">
-                        //                 <h5 className="card-title mb-0">{pet.name}</h5>
-                        //                 <div className="card-text text-black-50">Meses de nacido/a: {pet.age}</div>
-                        //                 <div className="card-text text-black-50">Raza: {pet.breed}</div>
-                        //                 <button className="btn btn-lg btn-success btn-block text-uppercase" type="submit">Adoptar</button>
-                        //             </div>
-                        //         </div>
-                        //     </div>
-                        // </li>
                     ))}
                 </ul>
 
