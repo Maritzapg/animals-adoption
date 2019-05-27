@@ -222,7 +222,7 @@ class SignUpFormBase extends Component {
                                         </div> */}
                                         <hr/>
                                         <h6 style={style}>{strengthPwd === TEXTS.LOW || strengthPwd === TEXTS.MEDIUM?'La contraseña debe tener más de seis caracteres':''}</h6>
-                                        <h6 style={style}>{strengthPwd === TEXTS.LOW || strengthPwd === TEXTS.MEDIUM?'al menos un número, una mayuscula, una minúscula':''}</h6>
+                                        <h6 style={style}>{strengthPwd === TEXTS.LOW || strengthPwd === TEXTS.MEDIUM?'al menos un número, una mayúscula, una minúscula':''}</h6>
                                         <h6 style={style}>{strengthPwd === TEXTS.LOW || strengthPwd === TEXTS.MEDIUM?'y un caracter especial':''}</h6>
                                         <label>Seguridad de la contraseña: <label style={{color:color}}>{strengthPwd}</label></label>
 

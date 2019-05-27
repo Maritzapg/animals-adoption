@@ -25,7 +25,7 @@ class PetsListUser extends Component {
     
     componentWillMount()
     {
-        /*firebase.auth().onAuthStateChanged(user =>
+        firebase.auth().onAuthStateChanged(user =>
         {
             this.setState({ user })
             const adoptionFormsByUser = []
@@ -52,7 +52,7 @@ class PetsListUser extends Component {
                    // loading: false,
                 });
             });
-        })*/
+        })
     }
 
     onClick(pet) {

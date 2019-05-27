@@ -124,7 +124,6 @@ class UserListBase extends Component {
     }
 
     handleDeleteUser() {
-        debugger
         this.props.firebase.user(this.state.selectedUser.uid).remove()
         this.handleClose()
     }

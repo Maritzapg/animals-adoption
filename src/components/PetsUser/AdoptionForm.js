@@ -235,7 +235,7 @@ debugger
                                             />
 
                                             <div className="form-label-group">
-                                                <h6 className="login-heading mb-2">¿Que tipo de vivienda tiene?</h6>
+                                                <h6 className="login-heading mb-2">¿Qué tipo de vivienda tiene?</h6>
                                                 <select className="form-control" name="houseType" onChange={this.onChange} value={houseType}>
                                                     <option value='Ninguna'>Ninguna</option>
                                                     <option value='Apartamento'>Apartamento</option>
@@ -302,7 +302,7 @@ debugger
                                             </div> */}
 
                                             <div className="form-label-group">
-                                                <h6 className="login-heading mb-2">¿Algun miembro de su familia es alérgico a los animales o sufre de asma?</h6>
+                                                <h6 className="login-heading mb-2">¿Algún miembro de su familia es alérgico a los animales o sufre de asma?</h6>
                                                 <select className="form-control" name="haveAllergicFamily" value={haveAllergicFamily} onChange={this.onChange}>
                                                     <option value={true}>SI</option>
                                                     <option value={false}>NO</option>

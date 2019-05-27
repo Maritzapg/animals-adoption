@@ -4,9 +4,29 @@ import firebase from 'firebase';
 
 import { compose } from 'recompose';
 import { withFirebase } from '../Firebase';
-import { withAuthorization, withEmailVerification } from '../Session';
-import * as ROUTES from '../../constants/routes';
+import { withAuthorization } from '../Session';
 import * as ROLES from '../../constants/roles';
+
+
+import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItem from '@material-ui/core/ListItem';
+import List from '@material-ui/core/List';
+import Divider from '@material-ui/core/Divider';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import CloseIcon from '@material-ui/icons/Close';
+import Slide from '@material-ui/core/Slide';
+
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 
 const FormsByPetPage = () => (
     <div>
@@ -20,6 +40,10 @@ const style = {
 
 const INITIAL_STATE = {
     loading: false,
+    open: false,
+    selectedForm: {},
+    openConfirmPopup: false,
+    denied: false,
     formsByPet: [
         {
             numberPhone: 0,
@@ -52,6 +76,14 @@ const INITIAL_STATE = {
     ]
 }
 
+
+
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
+
+
 class FormsByPet extends Component {
     constructor(props) {
         super(props)
@@ -59,6 +91,7 @@ class FormsByPet extends Component {
         this.state = {
             ...INITIAL_STATE,
         }
+        this.handleResultAdoption = this.handleResultAdoption.bind(this)
     }
 
     componentDidMount() {
@@ -80,297 +113,246 @@ class FormsByPet extends Component {
         });
     }
 
+    handleResultAdoption()
+    {
+        if(this.state.denied)
+        {
+            console.log('Mascota NO adoptada... :(', this.state.selectedForm.pet.name)
+        }
+        else
+        {
+            console.log('Mascota adoptada!', this.state.selectedForm.pet.name)
+        }
+        this.setState({openConfirmPopup:false})
+    }
+
+    handleClickOpen = (form) => {
+        this.setState({ open: true, selectedForm: form });
+    }
+
+    handleClose = () => {
+        this.setState({ open: false });
+    }
+
+    showConfirmPopup() {
+        
+        if(this.state.openConfirmPopup)
+        {
+            return (
+                <Dialog
+                    open={this.state.openConfirmPopup}
+                    onClose={()=>this.setState({openConfirmPopup:false})}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">{this.state.denied?'Denegar adopción':'Aprobar adopción'}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            {this.state.denied?'¿Estas seguro de denegar esta adopción?, Si aceptas, '+ this.state.selectedForm.pet.name +' perderá esta aportunidad de adopción':
+                            '¿Estas seguro de aprobar esta adopción?, Si aceptas, '+ this.state.selectedForm.pet.name +' dejará de aparecer disponible para los usuarios interesados en ella.'}
+                    </DialogContentText>
+                    </DialogContent>
+                    <DialogActions className="modal-footer">
+                        <Button onClick={this.handleResultAdoption} color="primary" autoFocus className="btn btn-success">
+                            Aceptar
+                        </Button>
+                        <Button onClick={()=>this.setState({openConfirmPopup:false})} color="primary" className="btn btn-danger">
+                            Cancelar
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            )
+        }
+    }
+
+    showPopupForm() {
+        
+        const {
+            open,
+            selectedForm,
+        } = this.state
+        
+        return (
+            <div>
+                {this.showConfirmPopup()}
+                <Dialog fullScreen open={open} onClose={this.handleClose} TransitionComponent={Transition}>
+                    <AppBar>
+                        <Toolbar>
+                            <IconButton edge="start" color="inherit" onClick={this.handleClose} aria-label="Close">
+                                <CloseIcon />
+                            </IconButton>
+                            <Typography variant="h6" style={{paddingRight:'33em', color:'white', paddingLeft:'2em'}}>
+                                Formulario diligenciado
+                            </Typography>
+                            <Button color="inherit" onClick={()=>this.setState({openConfirmPopup:true, denied:false})}>
+                                Aprobar adopción
+                            </Button>
+                            <Button color="inherit" onClick={()=>this.setState({openConfirmPopup:true, denied:true})}>
+                                Denegar adopción
+                            </Button>
+                        </Toolbar>
+                    </AppBar>
+                    <br/><br/><br/>
+                    <List>
+                        <ListItem button>
+                            <ListItemText primary="Número telefónico" secondary={selectedForm.numberPhone} />
+                        </ListItem>
+                        <Divider />
+                        <ListItem button>
+                            <ListItemText primary="¿Cuántas personas viven con usted?" secondary={selectedForm.numberPeople} />
+                        </ListItem>
+                        <Divider />
+                        <ListItem button>
+                            <ListItemText primary="¿Cuántos hijos tiene?" secondary={selectedForm.numberSons} />
+                        </ListItem>
+                        <Divider />
+                        <ListItem button>
+                            <ListItemText primary="¿Qué tipo de vivienda tiene?" secondary={selectedForm.houseType} />
+                        </ListItem>
+                        <Divider />
+                        <ListItem button>
+                            <ListItemText primary="Si la respuesta anterior fue positiva, ¿Cuántos años tiene su hijo/a menor?" secondary={selectedForm.ageYoungestSon} />
+                        </ListItem>
+                        <Divider />
+                        <ListItem button>
+                            <ListItemText primary="¿Qué tipo de vivienda tiene?" secondary={selectedForm.houseType} />
+                        </ListItem>
+                        <Divider />
+                        <ListItem button>
+                            <ListItemText primary="¿Por qué desea adoptar esta mascota?" secondary={selectedForm.whyThisPet} />
+                        </ListItem>
+                        <Divider />
+                        <ListItem button>
+                            <ListItemText primary="¿Actualmente tiene otras mascotas?" secondary={selectedForm.petsInThePresent?'Si': 'No'} />
+                        </ListItem>
+                        <Divider />
+                        <ListItem button>
+                            <ListItemText primary="¿Anteriormente ha tenido otras mascotas?" secondary={selectedForm.petsInThePast?'Si': 'No'} />
+                        </ListItem>
+                        <Divider />
+                        <ListItem button>
+                            <ListItemText primary="¿Está de acuerdo en que se realicen visita periódica para ver cómo se encuentra la mascota adoptado?" secondary={selectedForm.agreePeriodicVisit?'Si': 'No'} />
+                        </ListItem>
+                        <Divider />
+                        <ListItem button>
+                            <ListItemText primary="¿Algún miembro de su familia es alérgico a los animales o sufre de asma?" secondary={selectedForm.haveAllergicFamily?'Si': 'No'} />
+                        </ListItem>
+                        <Divider />
+                        <ListItem button>
+                            <ListItemText primary="Si por algún motivo tuviera que cambiar de domicilio, ¿Qué pasaría con su mascota" secondary={selectedForm.ifChangeHouse} />
+                        </ListItem>
+                        <Divider />
+                        <ListItem button>
+                            <ListItemText primary="En caso de una ruptura en la familia (divorcio, fallecimiento) o de la llegada de un nuevo hijo ¿Cree usted que cambie el trato hacia la mascota?" secondary={selectedForm.wouldChangeDeal?'Si': 'No'} />
+                        </ListItem>
+                        <Divider />
+                        <ListItem button>
+                            <ListItemText primary="¿Considera que cuenta con espacio suficiente para que la mascota este cómoda?" secondary={selectedForm.enoughSpace?'Si': 'No'} />
+                        </ListItem>
+                        <Divider />
+                        <ListItem button>
+                            <ListItemText primary="Si el comportamiento no es el que usted desea, ¿Qué medidas tomaría?" secondary={selectedForm.ifBadConduct} />
+                        </ListItem>
+                        <Divider />
+                        <ListItem button>
+                            <ListItemText primary="¿Cuenta con el presupuesto suficiente para la alimentación de la mascota adoptada?" secondary={selectedForm.enoughMoney?'Si': 'No'} />
+                        </ListItem>
+                        <Divider />
+                        <ListItem button>
+                            <ListItemText primary="¿Asume el compromiso de esterilizar al adoptado una vez que tenga la edad suficiente?" secondary={selectedForm.doWantSterilize?'Si': 'No'} />
+                        </ListItem>
+                    </List>
+                </Dialog>
+            </div>
+        )
+    }
+
     render() {
         const { formsByPet, loading } = this.state;
 
-        return (
-            <div>
-                {loading && <label>Loading ...</label>}
-
-                <div className="container-fluid">
-                    <div className="row no-gutter">
-                        <div className="col-md-8 col-lg-6">
-                            <div className="d-flex align-items-right py-3">
-                                <div className="container">
-                                    <div className="row">
-                                        <div className="col-md-9 col-lg-8 mx-auto">
-                                            <form>
-                                                <div className="form-label-group">
-                                                    <h1 htmlFor="inputUserame">Mascota</h1>
-                                                    <h3 htmlFor="inputUserame">{formsByPet[0].pet.name}</h3>
-                                                </div>
-                                            </form>
+        if(formsByPet.length > 0)
+        {
+            return (
+                <div>
+                    {this.showPopupForm()}
+    
+                    <div className="container-fluid">
+                        <div className="row no-gutter">
+                            <div className="col-md-8 col-lg-6">
+                                <div className="d-flex align-items-right py-3">
+                                    <div className="container">
+                                        <div className="row">
+                                            <div className="col-md-9 col-lg-8 mx-auto">
+                                                <form>
+                                                    <div className="form-label-group">
+                                                        <h1 htmlFor="inputUserame">Mascota</h1>
+                                                        <h3 htmlFor="inputUserame">{formsByPet[0].pet.name}</h3>
+                                                    </div>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <table className="table">
-                    <div className="container-fluid">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th style={style} scope="col">Nombre</th>
-                                <th style={style} scope="col">Correo</th>
-                                <th style={style} scope="col">Fecha de formulario</th>
-                                <th style={style} scope="col">Telefono</th>
-                                <th style={style} scope="col" data-toggle="modal">Ver formulario</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                            {formsByPet.map((form, i) => (
-                                <tr key={form.uid}>
-                                    <th scope="row">{i + 1}</th>
-                                    <td>{form.user.username}</td>
-                                    <td>{form.user.email}</td>
-                                    <td>{form.created_at}</td>
-                                    <td>{form.numberPhone}</td>
-                                    <td>
-                                        {/* <Link className="btn btn-info"
-                                            to={{
-                                                pathname: `${ROUTES.ADMIN}/${user.uid}`,
-                                                state: { user },
-                                            }}
-                                        >
-                                            Ver más
-                                        </Link> */}
-
-                                        <button onClick={() => this.handleClickOpen(form)} className="btn btn-info" type="button">Ver más</button>
-                                    </td>
+                    {loading && <label>Loading ...</label>}
+                    <table className="table">
+                        <div className="container-fluid">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th style={style} scope="col">Nombre</th>
+                                    <th style={style} scope="col">Correo</th>
+                                    <th style={style} scope="col">Fecha de formulario</th>
+                                    <th style={style} scope="col">Telefono</th>
+                                    <th style={style} scope="col" data-toggle="modal">Ver formulario</th>
                                 </tr>
-                            ))}
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Larry</td>
-                                <td>Larry@correo.com</td>
-                                <td>15-05-19</td>
-                                <td>2345678</td>
-
-                                <td><button href="#victorModal" role="button" data-toggle="modal" className="btn btn-info" type="submit">Ver más</button></td>
-
-                                <div id="victorModal" className="modal fade">
-                                    <div className="modal-dialog">
-                                        <ul>
-                                        <div className="modal-content">
-                                            <li>
-                                            <div className="modal-header">
-                                                <h5 className="modal-title">Formulario diligenciado</h5>
-                                                <button type="button" className="close" data-dismiss="modal" aria-label="Close" />
-                                                <span aria-hidden="true">&times;</span>
-                                            </div>
-                                            </li>
-                                            <li>
-                                            <div className="modal-body modal-header">
-                                                <div className="left">
-                                                    <p>Número de telefono</p>
-                                                </div>
-                                                <div className="right">
-                                                    <p><small>12345678</small></p>
-                                                </div>
-                                            </div>
-                                            </li>
-                                            <div className="modal-body modal-header">
-                                                <div className="left">
-                                                    <p>¿Cuantas personas conforman su nucleo familiar?</p>
-                                                </div>
-                                                <div className="right">
-                                                    <p><small>1</small></p>
-                                                </div>
-                                            </div>
-                                            <div className="modal-body modal-header">
-                                                <div className="left">
-                                                    <p>¿Cuantas personas viven con usted?</p>
-                                                </div>
-                                                <div className="right">
-                                                    <p><small>3</small></p>
-                                                </div>
-                                            </div>
-                                            <div className="modal-body  modal-header">
-                                                <div className="left">
-                                                    <p>¿Cuantas hijos tiene?</p>
-                                                </div>
-                                                <div className="right">
-                                                    <p><small>3</small></p>
-                                                </div>
-                                            </div>
-                                            <div className="modal-body modal-header">
-                                                <div className="left">
-                                                    <p>¿Entre que edades se encientran sus hijos?</p>
-                                                </div>
-                                                <div className="right">
-                                                    <p><small>0-9 meses</small></p>
-                                                </div>
-                                            </div>
-                                            <div className="modal-body modal-header">
-                                                <div className="left">
-                                                    <p>¿Que tipo de vivienda tiene?</p>
-                                                </div>
-                                                <div className="right">
-                                                    <p><small>Casa</small></p>
-                                                </div>
-                                            </div>
-                                            <div className="modal-body">
-                                                <div className="left">
-                                                    <p>¿Por qué desea adoptar una mascota?</p>
-                                                </div>
-                                                <div className="centerrr">
-                                                    <p><small>asdfgjnbfvdscaxcsdfngbvdcsvgf nbvdscavd gbvdcsafdvsc</small></p>
-                                                </div>
-                                            </div>
-                                            <div className="modal-body modal-header">
-                                                <div className="left">
-                                                    <p>¿Actualmente tiene otras mascotas?</p>
-                                                </div>
-                                                <div className="right">
-                                                    <p><small>si</small></p>
-                                                </div>
-                                            </div>
-                                            <div className="modal-body modal-header">
-                                                <div className="left">
-                                                    <p>Si la respuesta anterior fue positiva, ¿Hace cuanto tiempo tiene la mascota?</p>
-                                                </div>
-                                                <div className="right">
-                                                    <p><small>Menos de 1 año</small></p>
-                                                </div>
-                                            </div>
-                                            <div className="modal-body modal-header">
-                                                <div className="left">
-                                                    <p>¿Anteriormente ha tenido otras mascotas?</p>
-                                                </div>
-                                                <div className="right">
-                                                    <p><small>No</small></p>
-                                                </div>
-                                            </div>
-                                            <div className="modal-body modal-header">
-                                                <div className="left">
-                                                    <p>¿Está de acuerdo en que se realicen visita periódica para ver cómo se encuentra la mascota adoptado?</p>
-                                                </div>
-                                                <div className="right">
-                                                    <p><small>No</small></p>
-                                                </div>
-                                            </div>
-                                            <div className="modal-body modal-header">
-                                                <div className="left">
-                                                    <p>¿Están todos los mienbro de su familia deacuerdo en adoptar?</p>
-                                                </div>
-                                                <div className="right">
-                                                    <p><small>No</small></p>
-                                                </div>
-                                            </div>
-                                            <div className="modal-body modal-header">
-                                                <div className="left">
-                                                    <p>¿Algun miembro de su familia es alérgico a los animales o sufre de asma?</p>
-                                                </div>
-                                                <div className="right">
-                                                    <p><small>No</small></p>
-                                                </div>
-                                            </div>
-                                            <div className="modal-body modal-header">
-                                                <div className="left">
-                                                    <p>En caso de alquiler, ¿Sus arrendadores permiten mascotas en la vivienda?</p>
-                                                </div>
-                                                <div className="right">
-                                                    <p><small>No</small></p>
-                                                </div>
-                                            </div>
-                                            <div className="modal-body modal-header">
-                                                <div className="left">
-                                                    <p>Si por algún motivo tuviera que cambiar de domicilio, ¿Qué pasaría con su mascota?</p>
-                                                </div>
-                                                <div className="right">
-                                                    <p><small>No</small></p>
-                                                </div>
-                                            </div>
-                                            <div className="modal-body modal-header">
-                                                <div className="left">
-                                                    <p>En caso de una ruptura en la familia (divorcio, fallecimiento) o de la llegada de un nuevo hijo ¿cree usted que cambie el trato hacia la mascota?</p>
-                                                </div>
-                                                <div className="right">
-                                                    <p><small>No</small></p>
-                                                </div>
-                                            </div>
-                                            <div className="modal-body">
-                                                <div >
-                                                    <p>¿Cómo se ve con su mascota adoptada dentro de 5 años?</p>
-                                                </div>
-                                                <div className="centerrr">
-                                                    <p><small>asfdgfhgjmhnbvcvebrtbvec</small></p>
-                                                </div>
-                                            </div>
-                                            <div className="modal-body modal-header">
-                                                <div className="left">
-                                                    <p>¿Considera usted que cuenta con espacio sufuciente para que la mascota este cómodo?</p>
-                                                </div>
-                                                <div className="right">
-                                                    <p><small>no</small></p>
-                                                </div>
-                                            </div>
-                                            <div className="modal-body modal-header">
-                                                <div className="left">
-                                                    <p>¿Cuánto tiempo pasará sola la mascota?</p>
-                                                </div>
-                                                <div className="right">
-                                                    <p><small>2 horas</small></p>
-                                                </div>
-                                            </div>
-                                            <div className="modal-body">
-                                                <div className="left">
-                                                    <p>¿Si el comportamiento no es el que usted desea, qué medidas tomaría?</p>
-                                                </div>
-                                                <div className="centerrr">
-                                                    <p><small>asdfbgnhyuynrbrvewc</small></p>
-                                                </div>
-                                            </div>
-                                            <div className="modal-body modal-header">
-                                                <div className="left">
-                                                    <p>¿Cuenta con el presupuesto sufuciente para la alimentación de la mascota adoptada?</p>
-                                                </div>
-                                                <div className="right">
-                                                    <p><small>si</small></p>
-                                                </div>
-                                            </div>
-                                            <div className="modal-body modal-header">
-                                                <div className="left">
-                                                    <p>¿Quién será el responsable y se hará cargo de cubrir los gastos del adoptado?</p>
-                                                </div>
-                                                <div className="right">
-                                                    <p><small>si</small></p>
-                                                </div>
-                                            </div>
-                                            <div className="modal-body modal-header">
-                                                <div className="left">
-                                                    <p>¿Cuenta con los recursos para cubrir los gastos veterinarios?</p>
-                                                </div>
-                                                <div className="right">
-                                                    <p><small>si</small></p>
-                                                </div>
-                                            </div>
-                                            <div className="modal-body modal-header">
-                                                <div className="left">
-                                                    <p>¿Asume el compromiso de esterilizar al adoptado una vez que tenga la edad suficiente?</p>
-                                                </div>
-                                                <div className="right">
-                                                    <p><small>si</small></p>
-                                                </div>
-                                            </div>
-                                            <div className="modal-footer">
-                                                <button type="button" className="btn btn-success" data-dismiss="modal">Aprobar Adopción</button>
-                                                <button type="button" className="btn btn-danger">Denegar Adopción</button>
+                            </thead>
+                            <tbody>
+    
+                                {formsByPet.map((form, i) => (
+                                    <tr key={form.uid}>
+                                        <th scope="row">{i + 1}</th>
+                                        <td>{form.user.username}</td>
+                                        <td>{form.user.email}</td>
+                                        <td>{form.created_at}</td>
+                                        <td>{form.numberPhone}</td>
+                                        <td>
+                                            <button onClick={() => this.handleClickOpen(form)} className="btn btn-info" type="button">Ver más</button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </div>
+                    </table>
+                </div>
+            )
+        }
+        else{
+            return (
+                <div className="container-fluid">
+                        <div className="row no-gutter">
+                            <div className="col-md-8 col-lg-6">
+                                <div className="d-flex align-items-right py-3">
+                                    <div className="container">
+                                        <div className="row">
+                                            <div className="col-md-9 col-lg-8 mx-auto">
+                                                <form>
+                                                    <div className="form-label-group">
+                                                        <h1 htmlFor="inputUserame">Aún no hay solicitudes de adopción para esta mascota</h1>
+                                                    </div>
+                                                </form>
                                             </div>
                                         </div>
-                                        </ul>
                                     </div>
                                 </div>
-                            </tr>
-                        </tbody>
+                            </div>
+                        </div>
                     </div>
-                </table>
-            </div>
-        )
+            )
+        }
+        
     }
 }
 
