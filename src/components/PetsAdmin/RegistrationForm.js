@@ -53,7 +53,7 @@ class RegistrationFormBase extends Component {
         let today  = new Date();
         const date = today.toLocaleDateString("es", options)
 
-        // Create a pet in your Firebase realtime database
+        // Edit a pet in your Firebase realtime database
         if(this.props.location.state!==undefined)
         {
             this.props.firebase.pet(this.props.location.state.pet.uid).set({
@@ -76,7 +76,7 @@ class RegistrationFormBase extends Component {
             });
         }
         else
-        {
+        {// Create a pet in your Firebase realtime database
             var newRef = firebase.database().ref(`/pets`)
             newRef.push().set({
                 name,

@@ -11,3 +11,4 @@ export const ADMIN_DETAILS = '/admin/:id';
 export const PETS_USER = '/pets-user';
 export const ADOPTION_FORM = '/adoption-form/:id';
 export const REGISTER_PET = '/register-pet';
+export const FORMS_BY_PET = '/forms-by-pet';

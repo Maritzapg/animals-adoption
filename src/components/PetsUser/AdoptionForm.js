@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import { compose } from 'recompose';
 import firebase from 'firebase';
+import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
 
 const INITIAL_STATE = {
@@ -19,7 +21,9 @@ const INITIAL_STATE = {
     enoughSpace: false,
     ifBadConduct: '',
     enoughMoney: false,
-    doWantSterilize: false
+    doWantSterilize: false,
+    user:{},
+    pet:{}
 };
 
 class AdoptionForm extends Component {
@@ -30,6 +34,19 @@ class AdoptionForm extends Component {
             ...INITIAL_STATE
         }
         this.onSubmit = this.onSubmit.bind(this)
+    }
+
+    componentWillMount()
+    {debugger
+        const userUid = this.props.location.state.userUid
+        
+        this.props.firebase
+            .user(userUid)
+            .on('value', snapshot => {
+                this.setState({
+                    user: snapshot.val()
+                })
+            })
     }
 
     onSubmit(event){
@@ -57,16 +74,17 @@ class AdoptionForm extends Component {
         let today  = new Date();
         const date = today.toLocaleDateString("es", options)
         debugger
-        const petUid = this.props.location.state.pet.uid
-        const userUid = this.props.location.state.userUid
-
+        const pet = this.props.location.state.pet
+        var user = this.state.user
+        user.uid = this.props.location.state.userUid
+debugger
 
         // Create a register of adoption form in your Firebase realtime database
         var newRef = firebase.database().ref(`/adoptionForms`)
         debugger
         newRef.push().set({
-            petUid,
-            userUid,
+            pet,
+            user,
             numberPhone,
             numberPeople,
             numberSons,
@@ -84,7 +102,8 @@ class AdoptionForm extends Component {
             ifBadConduct,
             enoughMoney,
             doWantSterilize, 
-            created_at: this.props.firebase.serverValue.TIMESTAMP,
+            created_at: date 
+            //this.props.firebase.serverValue.TIMESTAMP,
         })
         .then(() => {
             this.setState({ ...INITIAL_STATE });
@@ -121,7 +140,7 @@ class AdoptionForm extends Component {
             enoughMoney,
             doWantSterilize
         } = this.state; 
-debugger
+
         const isInvalid =
             numberPhone === '' ||
             numberPeople === '' ||
@@ -140,12 +159,12 @@ debugger
             ifBadConduct === '' ||
             enoughMoney === '' ||
             doWantSterilize === '';
-            
+            debugger
         return (
             <div className="container-fluid">
                 <div className="row no-gutter">
                     <div className="d-none d-md-flex col-md-4 col-lg-6 bg-image-cuestionario"
-                        style={{ backgroundImage: 'url(' + this.props.location.state.pet.photo + ')' }}
+                        style={{ backgroundImage: 'url(' + 'https://images.unsplash.com/photo-1552053831-71594a27632d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60'+ ')' }}
                         //style={backgroundImage: url('https://images.unsplash.com/photo-1552053831-71594a27632d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60')}
                     ></div>
                     <div className="col-md-8 col-lg-6">
@@ -406,4 +425,6 @@ debugger
     }
 }
 
-export default AdoptionForm; 
+export default compose(
+    withFirebase,
+)(AdoptionForm);

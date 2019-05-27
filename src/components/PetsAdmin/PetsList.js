@@ -20,9 +20,9 @@ class PetsList extends Component {
         this.handleDeletePet = this.handleDeletePet.bind(this)
     }
 
-    onClick() {
-        this.props.history.push(ROUTES.ADOPTION_FORM)
-    }
+    // onClick() {
+    //     this.props.history.push(ROUTES.ADOPTION_FORM)
+    // }
 
     componentDidMount() {
         this.setState({ loading: true });
@@ -45,8 +45,7 @@ class PetsList extends Component {
         this.props.firebase.pets().off();
     }
 
-    handleClickOpen = (pet) => {
-        debugger
+    handleClickOpenDelete = (pet) => {
         this.setState({ open: true, selectedPet: pet });
     }
 
@@ -85,10 +84,18 @@ class PetsList extends Component {
         )
     }
 
-    onClick(pet) 
+    onClickModify(pet) 
     {
         this.props.history.push({
             pathname: `${ROUTES.REGISTER_PET}/${pet.uid}`,
+            state: { pet }
+        })
+    }
+
+    onClickReviewForms(pet) 
+    {
+        this.props.history.push({
+            pathname: `${ROUTES.FORMS_BY_PET}/${pet.uid}`,
             state: { pet }
         })
     }
@@ -110,16 +117,18 @@ class PetsList extends Component {
                                 <div className="row">
                                     <div className="col-md-7">
                                         <a>
-                                            <img className="img-fluid rounded mb-3 mb-md-0" src={pet.photo} alt="" style={{maxWidth:'600px', maxHeight:'400px'}}/>
+                                            <img className="img-fluid rounded mb-3 mb-md-0" src={pet.photo} alt="" style={{maxWidth:'500px', maxHeight:'300px'}}/>
                                         </a>
                                     </div>
                                     <div className="col-md-5">
                                         <h3>{pet.name}</h3>
                                         <p>Edad en meses: {pet.age}</p>
                                         <p>Raza: {pet.breed}</p>
-                                        <a className="btn btn-secondary" onClick={()=>this.onClick(pet)} style={{cursor:'pointer', color:'white'}}>Modificar información</a>
+                                        <a className="btn btn-secondary" onClick={()=>this.onClickModify(pet)} style={{cursor:'pointer', color:'white'}}>Modificar información</a>
                                         <br/><br/>
-                                        <a className="btn btn-danger" onClick={()=>this.handleClickOpen(pet)} style={{cursor:'pointer', color:'white'}}>Remover</a>
+                                        <a className="btn btn-primary" onClick={()=>this.onClickReviewForms(pet)} style={{cursor:'pointer', color:'white'}}>Ver solicitudes de adopción</a>
+                                        <br/><br/>
+                                        <a className="btn btn-danger" onClick={()=>this.handleClickOpenDelete(pet)} style={{cursor:'pointer', color:'white'}}>Remover</a>
                                     </div>
                                 </div>
                                 <hr/>
@@ -134,11 +143,15 @@ class PetsList extends Component {
                                         </a>
                                     </div>
                                     <div className="col-md-5">
-                                        <h3>Lola</h3>
-                                        <p>Pendiente por adopción</p>
-                                        <a className="btn btn-primary" href="#">Ver solicitudes de adopción</a>
+                                        <h3>{pet.name}</h3>
+                                        <p>Adoptada por: {pet.owner}</p>
+                                        <p>Raza: {pet.breed}</p>
+                                        <p>Edad en meses: {pet.age}</p>
+                                        {/* <a className="btn btn-secondary" onClick={()=>this.onClick(pet)} style={{cursor:'pointer', color:'white'}}>Modificar información</a>
                                         <br/><br/>
-                                        <a className="btn btn-secondary" href="#">Remover</a>
+                                        <a className="btn btn-primary" onClick={()=>this.onClickReviewForms(pet)}>Ver solicitudes de adopción</a>
+                                        <br/><br/>
+                                        <a className="btn btn-secondary" href="#">Remover</a> */}
                                     </div>
                                 </div>
                             </li>

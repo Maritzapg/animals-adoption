@@ -14,6 +14,7 @@ import Pets from '../PetsAdmin/PetsListAdmin';
 import AdoptionForm from '../PetsUser/AdoptionForm';
 import RegistrationForm from '../PetsAdmin/RegistrationForm';
 import PetCare from '../PetCare';
+import FormsByPet from '../PetsAdmin/FormsByPet';
 
 import * as ROUTES from '../../constants/routes';
 import { withAuthentication } from '../Session';
@@ -35,6 +36,7 @@ const App = () => (
             <Route path={ROUTES.REGISTER_PET} component={RegistrationForm} />
             <Route path={ROUTES.PETS_USER} component={PetsListUser} />
             <Route path={ROUTES.PET_CARE} component={PetCare} />
+            <Route path={ROUTES.FORMS_BY_PET} component={FormsByPet} />
         </div>
     </Router>
 );

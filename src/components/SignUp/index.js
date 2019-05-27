@@ -210,7 +210,7 @@ class SignUpFormBase extends Component {
                                             />
                                             <label htmlFor="inputConfirmPassword">Confirmar contraseña</label>
                                         </div>
-                                        <div className="custom-control custom-checkbox mb-3">
+                                        {/* <div className="custom-control custom-checkbox mb-3">
                                             <input name="isAdmin"
                                                 type="checkbox"
                                                 className="custom-control-input"
@@ -219,7 +219,7 @@ class SignUpFormBase extends Component {
                                                 onChange={this.onChangeCheckbox}
                                             />
                                             <label className="custom-control-label" htmlFor="isAdmin">Administrador</label>
-                                        </div>
+                                        </div> */}
                                         <hr/>
                                         <h6 style={style}>{strengthPwd === TEXTS.LOW || strengthPwd === TEXTS.MEDIUM?'La contraseña debe tener más de seis caracteres':''}</h6>
                                         <h6 style={style}>{strengthPwd === TEXTS.LOW || strengthPwd === TEXTS.MEDIUM?'al menos un número, una mayuscula, una minúscula':''}</h6>
