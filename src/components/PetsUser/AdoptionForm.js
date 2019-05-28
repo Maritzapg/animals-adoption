@@ -211,6 +211,7 @@ class AdoptionForm extends Component {
                                             <input 
                                                 name="ageYoungestSon"
                                                 type="number" 
+                                                min="0"
                                                 className="form-control" 
                                                 placeholder="Edad en años" 
                                                 value={ageYoungestSon}
@@ -259,7 +260,7 @@ class AdoptionForm extends Component {
                                             </div>
 
                                             <div className="form-label-group">
-                                                <h6 className="login-heading mb-2">¿Está de acuerdo en que se realicen visita periódica para ver cómo se encuentra la mascota adoptado?</h6>
+                                                <h6 className="login-heading mb-2">¿Está de acuerdo en que se realice visita periódica para ver cómo se encuentra la mascota adoptada?</h6>
                                                 <select className="form-control" name="agreePeriodicVisit" value={agreePeriodicVisit} onChange={this.onChange}>
                                                     <option value={true}>SI</option>
                                                     <option value={false}>NO</option>
