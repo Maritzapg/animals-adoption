@@ -208,10 +208,6 @@ class FormsByPet extends Component {
                         </ListItem>
                         <Divider />
                         <ListItem button>
-                            <ListItemText primary="¿Qué tipo de vivienda tiene?" secondary={selectedForm.houseType} />
-                        </ListItem>
-                        <Divider />
-                        <ListItem button>
                             <ListItemText primary="Si la respuesta anterior fue positiva, ¿Cuántos años tiene su hijo/a menor?" secondary={selectedForm.ageYoungestSon} />
                         </ListItem>
                         <Divider />
@@ -232,7 +228,7 @@ class FormsByPet extends Component {
                         </ListItem>
                         <Divider />
                         <ListItem button>
-                            <ListItemText primary="¿Está de acuerdo en que se realicen visita periódica para ver cómo se encuentra la mascota adoptado?" secondary={selectedForm.agreePeriodicVisit?'Si': 'No'} />
+                            <ListItemText primary="¿Está de acuerdo en que se realice visita periódica para ver cómo se encuentra la mascota adoptada?" secondary={selectedForm.agreePeriodicVisit?'Si': 'No'} />
                         </ListItem>
                         <Divider />
                         <ListItem button>
@@ -240,11 +236,15 @@ class FormsByPet extends Component {
                         </ListItem>
                         <Divider />
                         <ListItem button>
-                            <ListItemText primary="Si por algún motivo tuviera que cambiar de domicilio, ¿Qué pasaría con su mascota" secondary={selectedForm.ifChangeHouse} />
+                            <ListItemText primary="Si por algún motivo tuviera que cambiar de domicilio, ¿Qué pasaría con su mascota?" secondary={selectedForm.ifChangeHouse} />
                         </ListItem>
                         <Divider />
                         <ListItem button>
                             <ListItemText primary="En caso de una ruptura en la familia (divorcio, fallecimiento) o de la llegada de un nuevo hijo ¿Cree usted que cambie el trato hacia la mascota?" secondary={selectedForm.wouldChangeDeal?'Si': 'No'} />
+                        </ListItem>
+                        <Divider />
+                        <ListItem button>
+                            <ListItemText primary="¿Cómo se ve con su mascota adoptada dentro de 2 años?" secondary={selectedForm.howWillBeInTwoYears} />
                         </ListItem>
                         <Divider />
                         <ListItem button>
