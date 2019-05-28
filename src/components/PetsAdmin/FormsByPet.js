@@ -114,9 +114,9 @@ class FormsByPet extends Component {
         if(this.state.denied)
         {
             console.log('Mascota NO adoptada... :(', this.state.selectedForm.pet.name)
-            this.props.firebase.pet(this.props.location.state.pet.uid).update({...this.state.selectedForm.pet,
-                'isAdopted': true, 'owner':{uid:this.state.selectedForm.user.uid, username:this.state.selectedForm.usser.username} })
-            debugger
+            //this.props.firebase.pet(this.props.location.state.pet.uid).update({...this.state.selectedForm.pet,
+              //  'isAdopted': true, 'owner':{uid:this.state.selectedForm.user.uid, username:this.state.selectedForm.usser.username} })
+            
         }
         else
         {

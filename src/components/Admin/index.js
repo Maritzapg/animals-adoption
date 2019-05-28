@@ -89,7 +89,9 @@ class UserListBase extends Component {
             loading: false,
             users: [],
             open: false,
-            selectedUser: {}
+            selectedUser: {},
+            search: '',
+            filteredUsers: null
         };
         this.handleDeleteUser = this.handleDeleteUser.bind(this)
     }
@@ -128,6 +130,19 @@ class UserListBase extends Component {
         this.handleClose()
     }
 
+    updateSearch(event) {
+        this.setState({search: event.target.value.substr(0, 20)})
+
+        let filteredUsers = this.state.users.filter(
+            (user) => {
+                return (
+                    user.username.toLowerCase().indexOf((event.target.value.substr(0, 20)).toLowerCase()) !== -1
+                )
+            }
+        )
+        this.setState({filteredUsers})
+    }
+
     showPopupDelete() {
         return (
             <Dialog
@@ -156,7 +171,7 @@ class UserListBase extends Component {
 
     render() {
         const { users, loading } = this.state;
-
+        var usersResult = this.state.filteredUsers === null ? users : this.state.filteredUsers
         return (
             <div>
                 {this.showPopupDelete()}
@@ -169,8 +184,8 @@ class UserListBase extends Component {
                                         <div className="col-md-9 col-lg-8 mx-auto">
                                             <form>
                                                 <div className="form-label-group">
-                                                    <input type="text" id="inputUserame" className="form-control" placeholder="Username" required autoFocus />
-                                                    <label htmlFor="inputUserame">Buscar</label>
+                                                    <input onChange={this.updateSearch.bind(this)} value={this.state.search} type="text" id="inputUserame" className="form-control" placeholder="Username" required autoFocus />
+                                                    <label htmlFor="inputUserame">Buscar usuario</label>
                                                 </div>
                                             </form>
                                         </div>
@@ -180,7 +195,6 @@ class UserListBase extends Component {
                         </div>
                     </div>
                 </div>
-
 
                 <table className="table">
                     {loading && <label>Loading ...</label>}
@@ -198,7 +212,7 @@ class UserListBase extends Component {
                         </thead>
                         <tbody>
 
-                            {users.map((user, i) => (
+                            {usersResult.map((user, i) => (
                                 <tr key={user.uid}>
                                     <th scope="row">{i + 1}</th>
                                     <td>{user.username}</td>

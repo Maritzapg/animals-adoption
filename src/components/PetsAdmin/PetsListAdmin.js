@@ -20,7 +20,7 @@ class Pets extends Component {
     }
 
     render() {
-        const { text, messages, loading } = this.state;
+        const { loading } = this.state;
         return (
             <div>
                 {loading && <div>Loading ...</div>}

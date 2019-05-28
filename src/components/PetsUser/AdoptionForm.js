@@ -37,7 +37,7 @@ class AdoptionForm extends Component {
     }
 
     componentWillMount()
-    {debugger
+    {
         const userUid = this.props.location.state.userUid
         
         this.props.firebase
@@ -73,15 +73,12 @@ class AdoptionForm extends Component {
         let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
         let today  = new Date();
         const date = today.toLocaleDateString("es", options)
-        debugger
         const pet = this.props.location.state.pet
         var user = this.state.user
         user.uid = this.props.location.state.userUid
-debugger
 
         // Create a register of adoption form in your Firebase realtime database
         var newRef = firebase.database().ref(`/adoptionForms`)
-        debugger
         newRef.push().set({
             pet,
             user,
@@ -159,7 +156,7 @@ debugger
             ifBadConduct === '' ||
             enoughMoney === '' ||
             doWantSterilize === '';
-            debugger
+            
         return (
             <div className="container-fluid">
                 <div className="row no-gutter">
@@ -175,31 +172,18 @@ debugger
                                         <h1 className="login-heading mb-4">Cuestionario</h1>
                                         <form onSubmit={this.onSubmit}>
 
-                                        <div className="form-label-group">
-                                            <h6 className="login-heading mb-2">Número telefónico</h6>
-                                            <input 
-                                                name="numberPhone"
-                                                type="number" 
-                                                className="form-control" 
-                                                placeholder="Teléfono" 
-                                                value={numberPhone}
-                                                onChange={this.onChange}
-                                                required autoFocus 
-                                            />
-                                        </div>
-
-                                            {/* <div className="form-label-group">
-                                                <h6 className="login-heading mb-2">¿Cuantas personas conforman su nucleo familiar?</h6>
-                                                <select className="form-control" id="exampleFormControlSelect1">
-                                                    <option>Ninguna</option>
-                                                    <option>1</option>
-                                                    <option>2</option>
-                                                    <option>3</option>
-                                                    <option>4</option>
-                                                    <option>5</option>
-                                                    <option>Más de 5</option>
-                                                </select>
-                                            </div> */}
+                                            <div className="form-label-group">
+                                                <h6 className="login-heading mb-2">Número telefónico</h6>
+                                                <input
+                                                    name="numberPhone"
+                                                    type="number"
+                                                    className="form-control"
+                                                    placeholder="Teléfono"
+                                                    value={numberPhone}
+                                                    onChange={this.onChange}
+                                                    required autoFocus
+                                                />
+                                            </div>
 
                                             <div className="form-label-group">
                                                 <h6 className="login-heading mb-2">¿Cuantas personas viven con usted?</h6>
@@ -266,17 +250,6 @@ debugger
                                                 </select>
                                             </div>
 
-                                            {/* <div className="form-label-group">
-                                                <h6 className="login-heading mb-2">Si la respuesta anterior fue positiva, ¿Hace cuanto tiempo tiene la mascota?</h6>
-                                                <select className="form-control" id="exampleFormControlSelect1">
-                                                    <option>Menos de 1 año</option>
-                                                    <option>Entre 1 y 2 años</option>
-                                                    <option>Entre 2 y 3 años</option>
-                                                    <option>Más de 3 años</option>
-                                                    <option>No aplica</option>
-                                                </select>
-                                            </div> */}
-
                                             <div className="form-label-group">
                                                 <h6 className="login-heading mb-2">¿Anteriormente ha tenido otras mascotas?</h6>
                                                 <select className="form-control" name="petsInThePast" value={petsInThePast} onChange={this.onChange}>
@@ -293,14 +266,6 @@ debugger
                                                 </select>
                                             </div>
 
-                                            {/* <div className="form-label-group">
-                                                <h6 className="login-heading mb-2">¿Están todos los mienbro de su familia deacuerdo en adoptar?</h6>
-                                                <select className="form-control" id="exampleFormControlSelect1">
-                                                    <option>SI</option>
-                                                    <option>NO</option>
-                                                </select>
-                                            </div> */}
-
                                             <div className="form-label-group">
                                                 <h6 className="login-heading mb-2">¿Algún miembro de su familia es alérgico a los animales o sufre de asma?</h6>
                                                 <select className="form-control" name="haveAllergicFamily" value={haveAllergicFamily} onChange={this.onChange}>
@@ -308,15 +273,6 @@ debugger
                                                     <option value={false}>NO</option>
                                                 </select>
                                             </div>
-
-                                            {/* <div className="form-label-group">
-                                                <h6 className="login-heading mb-2">En caso de alquiler, ¿Sus arrendadores permiten mascotas en la vivienda?</h6>
-                                                <select className="form-control" id="exampleFormControlSelect1">
-                                                    <option>SI</option>
-                                                    <option>NO</option>
-                                                    <option>VIVO EN CASA PROPIA</option>
-                                                </select>
-                                            </div> */}
 
                                             <div className="form-label-group">
                                                 <h6 className="login-heading mb-2">Si por algún motivo tuviera que cambiar de domicilio, ¿Qué pasaría con su mascota?</h6>
@@ -360,11 +316,6 @@ debugger
                                                 </select>
                                             </div>
 
-                                            {/* <div className="form-label-group">
-                                                <h6 className="login-heading mb-2">¿Cuánto tiempo pasará sola la mascota?</h6>
-                                                <input type="text" id="inputEmail" className="form-control" placeholder="telefotno" required autofocus />
-                                            </div> */}
-
                                             <div className="form-label-group">
                                                 <h6 className="login-heading mb-2">Si el comportamiento no es el que usted desea, ¿Qué medidas tomaría?</h6>
                                                 <textarea 
@@ -385,22 +336,6 @@ debugger
                                                     <option value={false}>NO</option>
                                                 </select>
                                             </div>
-
-                                            {/* <div className="form-label-group">
-                                                <h6 className="login-heading mb-2">¿Quién será el responsable y se hará cargo de cubrir los gastos del adoptado?</h6>
-                                                <select className="form-control" id="exampleFormControlSelect1">
-                                                    <option>SI</option>
-                                                    <option>NO</option>
-                                                </select>
-                                            </div> */}
-
-                                            {/* <div className="form-label-group">
-                                                <h6 className="login-heading mb-2">¿Cuenta con los recursos para cubrir los gastos veterinarios?</h6>
-                                                <select className="form-control" id="exampleFormControlSelect1">
-                                                    <option>SI</option>
-                                                    <option>NO</option>
-                                                </select>
-                                            </div> */}
 
                                             <div className="form-label-group">
                                                 <h6 className="login-heading mb-2">¿Asume el compromiso de esterilizar al adoptado una vez que tenga la edad suficiente?</h6>

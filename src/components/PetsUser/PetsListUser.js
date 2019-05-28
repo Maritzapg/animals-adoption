@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
 import { withFirebase } from '../Firebase';
 import firebase from 'firebase';
+import { finished } from 'stream';
 
 const PetsListUserPage = () => (
     <div>
@@ -37,8 +38,7 @@ class PetsListUser extends Component {
             const adoptionFormsByUser = []
 
             this.props.firebase.adoptionForms().on('value', snapshot => {
-                const adoptionFormsObject = snapshot.val();
-                debugger
+                const adoptionFormsObject = snapshot.val()
                 const adoptionFormsList = Object.keys(adoptionFormsObject).map(key => ({
                     ...adoptionFormsObject[key],
                     uid: key,
@@ -46,28 +46,24 @@ class PetsListUser extends Component {
 
                 if (user) {
                     adoptionFormsList.map((adoptionForm) => {
-                        debugger
-                        if (adoptionForm.userUid === user.uid)
+                        if (adoptionForm.user.uid === user.uid)
                             adoptionFormsByUser.push(adoptionForm)
                     })
                 }
 
                 this.setState({
                     adoptionFormsByUser
-                    // loading: false,
                 });
             });
         })
     }
 
     onClick(pet) {
-
         if (this.state.user) {
             const userUid = this.state.user.uid
 
             this.props.history.push({
                 pathname: `${ROUTES.ADOPTION_FORM}/${pet.uid}/${this.state.user.uid}`,
-                //search: `${user.uid}`,
                 state: { pet, userUid },
             })
         }
@@ -95,7 +91,6 @@ class PetsListUser extends Component {
         catch (error) {
             console.error(error)
         }
-
     }
 
     componentWillUnmount() {
@@ -103,13 +98,14 @@ class PetsListUser extends Component {
     }
 
     isFormFilled(pet) {
+        var isFormFilled = false
         if (this.state.adoptionFormsByUser.length > 0) {
             this.state.adoptionFormsByUser.map((adoptionForm) => {
-                if (adoptionForm.petUid === pet.uid)
-                    return true
+                if (adoptionForm.pet.uid === pet.uid)
+                    isFormFilled = true
             })
         }
-        else return false
+        return isFormFilled
     }
 
     render() {
@@ -144,7 +140,7 @@ class PetsListUser extends Component {
                                                     type="submit"
                                                     onClick={() => this.onClick(pet)}
                                                 >
-                                                    Adoptar
+                                                    {this.isFormFilled(pet) ?'Solicitud enviada': 'Adoptar'}
                                             </button>
                                             </div>
                                         </div>
