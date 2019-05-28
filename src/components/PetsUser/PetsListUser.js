@@ -104,7 +104,7 @@ class PetsListUser extends Component {
                 if (adoptionForm.pet.uid === pet.uid)
                     isFormFilled = true
             })
-        }
+        } 
         return isFormFilled
     }
 
