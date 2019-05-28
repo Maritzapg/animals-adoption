@@ -76,13 +76,9 @@ const INITIAL_STATE = {
     ]
 }
 
-
-
-
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
-
 
 class FormsByPet extends Component {
     constructor(props) {
@@ -118,12 +114,16 @@ class FormsByPet extends Component {
         if(this.state.denied)
         {
             console.log('Mascota NO adoptada... :(', this.state.selectedForm.pet.name)
+            this.props.firebase.pet(this.props.location.state.pet.uid).update({...this.state.selectedForm.pet,
+                'isAdopted': true, 'owner':{uid:this.state.selectedForm.user.uid, username:this.state.selectedForm.usser.username} })
+            debugger
         }
         else
         {
-            console.log('Mascota adoptada!', this.state.selectedForm.pet.name)
+            this.props.firebase.pet(this.props.location.state.pet.uid).update({...this.state.selectedForm.pet,
+                'isAdopted': true, 'owner':{uid:this.state.selectedForm.user.uid, username:this.state.selectedForm.user.username} })
         }
-        this.setState({openConfirmPopup:false})
+        this.setState({openConfirmPopup:false, open:false})
     }
 
     handleClickOpen = (form) => {
@@ -138,6 +138,7 @@ class FormsByPet extends Component {
         
         if(this.state.openConfirmPopup)
         {
+            var isShe = this.state.selectedForm.pet.gender ==='Hembra'?'ella.':'él.'
             return (
                 <Dialog
                     open={this.state.openConfirmPopup}
@@ -149,7 +150,7 @@ class FormsByPet extends Component {
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">
                             {this.state.denied?'¿Estas seguro de denegar esta adopción?, Si aceptas, '+ this.state.selectedForm.pet.name +' perderá esta aportunidad de adopción':
-                            '¿Estas seguro de aprobar esta adopción?, Si aceptas, '+ this.state.selectedForm.pet.name +' dejará de aparecer disponible para los usuarios interesados en ella.'}
+                            '¿Estas seguro de aprobar esta adopción?, Si aceptas, '+ this.state.selectedForm.pet.name +' dejará de aparecer disponible para los usuarios interesados en '+ isShe}
                     </DialogContentText>
                     </DialogContent>
                     <DialogActions className="modal-footer">
@@ -187,9 +188,9 @@ class FormsByPet extends Component {
                             <Button color="inherit" onClick={()=>this.setState({openConfirmPopup:true, denied:false})}>
                                 Aprobar adopción
                             </Button>
-                            <Button color="inherit" onClick={()=>this.setState({openConfirmPopup:true, denied:true})}>
+                            {/* <Button color="inherit" onClick={()=>this.setState({openConfirmPopup:true, denied:true})}>
                                 Denegar adopción
-                            </Button>
+                            </Button> */}
                         </Toolbar>
                     </AppBar>
                     <br/><br/><br/>
@@ -275,7 +276,6 @@ class FormsByPet extends Component {
             return (
                 <div>
                     {this.showPopupForm()}
-    
                     <div className="container-fluid">
                         <div className="row no-gutter">
                             <div className="col-md-8 col-lg-6">
@@ -329,30 +329,30 @@ class FormsByPet extends Component {
                 </div>
             )
         }
-        else{
+        else
+        {
             return (
                 <div className="container-fluid">
-                        <div className="row no-gutter">
-                            <div className="col-md-8 col-lg-6">
-                                <div className="d-flex align-items-right py-3">
-                                    <div className="container">
-                                        <div className="row">
-                                            <div className="col-md-9 col-lg-8 mx-auto">
-                                                <form>
-                                                    <div className="form-label-group">
-                                                        <h1 htmlFor="inputUserame">Aún no hay solicitudes de adopción para esta mascota</h1>
-                                                    </div>
-                                                </form>
-                                            </div>
+                    <div className="row no-gutter">
+                        <div className="col-md-8 col-lg-6">
+                            <div className="d-flex align-items-right py-3">
+                                <div className="container">
+                                    <div className="row">
+                                        <div className="col-md-9 col-lg-8 mx-auto">
+                                            <form>
+                                                <div className="form-label-group">
+                                                    <h1 htmlFor="inputUserame">Aún no hay solicitudes de adopción para esta mascota</h1>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
             )
         }
-        
     }
 }
 

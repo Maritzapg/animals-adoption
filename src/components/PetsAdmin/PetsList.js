@@ -20,14 +20,10 @@ class PetsList extends Component {
         this.handleDeletePet = this.handleDeletePet.bind(this)
     }
 
-    // onClick() {
-    //     this.props.history.push(ROUTES.ADOPTION_FORM)
-    // }
-
     componentDidMount() {
         this.setState({ loading: true });
 
-        this.props.firebase.pets().on('value', snapshot => {
+        this.props.firebase.pets().orderByChild('isAdopted').on('value', snapshot => {
             const petsObject = snapshot.val();
             const petsList = Object.keys(petsObject).map(key => ({
                 ...petsObject[key],
@@ -35,7 +31,7 @@ class PetsList extends Component {
             }));
 
             this.setState({
-                pets: petsList,
+                pets: petsList.reverse(),
                 loading: false,
             });
         });
@@ -139,12 +135,12 @@ class PetsList extends Component {
                                 <div className="row">
                                     <div className="col-md-7">
                                         <a>
-                                            <img className="img-fluid rounded mb-3 mb-md-0" src="https://images.unsplash.com/photo-1472491235688-bdc81a63246e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" alt="" />
+                                            <img className="img-fluid rounded mb-3 mb-md-0" src={pet.photo} alt="" />
                                         </a>
                                     </div>
                                     <div className="col-md-5">
                                         <h3>{pet.name}</h3>
-                                        <p>Adoptada por: {pet.owner}</p>
+                                        <p>Adoptada por: {pet.owner.username}</p>
                                         <p>Raza: {pet.breed}</p>
                                         <p>Edad en meses: {pet.age}</p>
                                         {/* <a className="btn btn-secondary" onClick={()=>this.onClick(pet)} style={{cursor:'pointer', color:'white'}}>Modificar información</a>
@@ -154,6 +150,7 @@ class PetsList extends Component {
                                         <a className="btn btn-secondary" href="#">Remover</a> */}
                                     </div>
                                 </div>
+                                <hr/>
                             </li>
                         )
                     ))}

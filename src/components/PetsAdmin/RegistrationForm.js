@@ -23,7 +23,7 @@ const INITIAL_STATE = {
     photo: '',
     gender: 'Hembra',
     isAdopted: false,
-    owner: '',
+    owner: {uid:'', username:''},
     uploadValue:null
 };
 
@@ -40,7 +40,7 @@ class RegistrationFormBase extends Component {
             photo: this.props.location.state!==undefined?this.props.location.state.pet.photo:'',
             gender: this.props.location.state!==undefined?this.props.location.state.pet.gender:'Hembra',
             isAdopted: this.props.location.state!==undefined?this.props.location.state.pet.isAdopted:false,
-            owner: '',
+            owner: {uid:'', username:''},
             uploadValue:null
         }
         this.onSubmit = this.onSubmit.bind(this)

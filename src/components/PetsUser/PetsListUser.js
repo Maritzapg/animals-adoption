@@ -11,22 +11,28 @@ const PetsListUserPage = () => (
     </div>
 );
 
+const styles = {
+    twoColumns: {
+        columnCount: 3,
+        MozColumnCount: 3,
+        WebkitColumnCount: 3,
+    }
+}
+
 class PetsListUser extends Component {
     constructor(props) {
         super(props)
         this.state = {
             loading: false,
             pets: [],
-            user:null,
+            user: null,
             adoptionFormsByUser: []
         }
         this.isFormFilled = this.isFormFilled.bind(this)
     }
-    
-    componentWillMount()
-    {
-        firebase.auth().onAuthStateChanged(user =>
-        {
+
+    componentWillMount() {
+        firebase.auth().onAuthStateChanged(user => {
             this.setState({ user })
             const adoptionFormsByUser = []
 
@@ -38,29 +44,27 @@ class PetsListUser extends Component {
                     uid: key,
                 }))
 
-                if(user)
-                {
+                if (user) {
                     adoptionFormsList.map((adoptionForm) => {
                         debugger
-                        if(adoptionForm.userUid === user.uid)
+                        if (adoptionForm.userUid === user.uid)
                             adoptionFormsByUser.push(adoptionForm)
                     })
                 }
-                
+
                 this.setState({
                     adoptionFormsByUser
-                   // loading: false,
+                    // loading: false,
                 });
             });
         })
     }
 
     onClick(pet) {
-        
-        if(this.state.user)
-        {
+
+        if (this.state.user) {
             const userUid = this.state.user.uid
-            
+
             this.props.history.push({
                 pathname: `${ROUTES.ADOPTION_FORM}/${pet.uid}/${this.state.user.uid}`,
                 //search: `${user.uid}`,
@@ -98,12 +102,10 @@ class PetsListUser extends Component {
         this.props.firebase.pets().off();
     }
 
-    isFormFilled(pet)
-    {
-        if(this.state.adoptionFormsByUser.length > 0)
-        {
+    isFormFilled(pet) {
+        if (this.state.adoptionFormsByUser.length > 0) {
             this.state.adoptionFormsByUser.map((adoptionForm) => {
-                if(adoptionForm.petUid === pet.uid)
+                if (adoptionForm.petUid === pet.uid)
                     return true
             })
         }
@@ -123,31 +125,32 @@ class PetsListUser extends Component {
                     </div>
                 </header>
                 <div className="container">
+                    <div className="row">
 
-                    <div className="row" style={{ columnCount: 2 }}>
                         {loading && <div>Cargando ...</div>}
-                        <ul>
-                            {pets.map(pet => (
-                                <li key={pet.uid} style={{ listStyleType: 'none' }}>
-                                    <div className="col-xl-3 col-md-6 mb-4">
-                                        <div className="card border-0 shadow">
-                                            <img src={pet.photo} className="card-img-top" alt="..." />
+                        
+                        <ul style={styles.twoColumns}>
+                            <li style={{ listStyle: 'none' }}>
+                                {pets.map(pet => (
+                                    <div key={pet.uid} className="col-xl-3 col-md-6 mb-4" style={{maxWidth:'100%'}}>
+                                        <div className="card border-0 shadow" style={{ width: '85%', height:'390px' }}>
+                                            <img src={pet.photo} className="card-img-top" alt="..." style={{height:'220px'}}/>
                                             <div className="card-body text-center">
                                                 <h5 className="card-title mb-0">{pet.name}</h5>
-                                                <div className="card-text text-black-50">Meses de nacido/a: {pet.age}</div>
+                                                <div className="card-text text-black-50">Meses: {pet.age}</div>
                                                 <div className="card-text text-black-50">Raza: {pet.breed}</div>
                                                 <button disabled={this.isFormFilled(pet)}
-                                                    className="btn btn-lg btn-success btn-block text-uppercase" 
+                                                    className="btn btn-lg btn-success btn-block text-uppercase"
                                                     type="submit"
-                                                    onClick={()=>this.onClick(pet)}
+                                                    onClick={() => this.onClick(pet)}
                                                 >
                                                     Adoptar
-                                                </button>
+                                            </button>
                                             </div>
                                         </div>
                                     </div>
-                                </li>
-                            ))}
+                                ))}
+                            </li>
                         </ul>
                     </div>
 
