@@ -161,7 +161,7 @@ class AdoptionForm extends Component {
             <div className="container-fluid">
                 <div className="row no-gutter">
                     <div className="d-none d-md-flex col-md-4 col-lg-6 bg-image-cuestionario"
-                        style={{ backgroundImage: 'url(' + 'https://images.unsplash.com/photo-1552053831-71594a27632d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60'+ ')' }}
+                        style={{ backgroundImage: 'url(' + this.props.location.state.pet.photo + ')' }}
                         //style={backgroundImage: url('https://images.unsplash.com/photo-1552053831-71594a27632d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60')}
                     ></div>
                     <div className="col-md-8 col-lg-6">
@@ -346,8 +346,8 @@ class AdoptionForm extends Component {
                                                 </select>
                                             </div>
 
-                                            <h6>Después de enviar el formulario y evaluar tu respuestas, te contactaremos. ¡Ánimo!</h6>
-                                            
+                                            <h6>Después de enviar el formulario y evaluar tus respuestas, te contactaremos. ¡Ánimo!</h6>
+                                            <br/>
                                             <button disabled={isInvalid} className="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit">Enviar Cuestionaro</button>
                                         </form>
                                     </div>

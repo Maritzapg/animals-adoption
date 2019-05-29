@@ -14,13 +14,15 @@ const PasswordForgetPage = () => (
 const INITIAL_STATE = {
     email: '',
     error: null,
+
 };
 
 class PasswordForgetFormBase extends Component {
     constructor(props) {
         super(props);
 
-        this.state = { ...INITIAL_STATE };
+        this.state = { ...INITIAL_STATE, msg: false };
+        this.renderMsg = this.renderMsg.bind(this)
     }
 
     onSubmit = event => {
@@ -29,9 +31,13 @@ class PasswordForgetFormBase extends Component {
         this.props.firebase
             .doPasswordReset(email)
             .then(() => {
-                this.setState({ ...INITIAL_STATE });
+                this.setState({ ...INITIAL_STATE, msg: true });
             })
             .catch(error => {
+                if(error.code==='auth/user-not-found')
+                {
+                    error.message = 'No hay registro de usuario correspondiente a este correo electrónico. El usuario puede haber sido eliminado.'
+                }
                 this.setState({ error });
             });
 
@@ -40,7 +46,15 @@ class PasswordForgetFormBase extends Component {
 
     onChange = event => {
         this.setState({ [event.target.name]: event.target.value });
-    };
+    }
+
+    renderMsg() {
+        if (this.state.msg) {
+            return (
+                <label>Te hemos enviado un correo con las indicaciones para cambiar tu contraseña y poder ingresar.</label>
+            )
+        }
+    }
 
     render() {
         const { email, error } = this.state;
@@ -73,9 +87,8 @@ class PasswordForgetFormBase extends Component {
                                             />
                                             <label htmlFor="inputEmail">Correo electrónico</label>
                                         </div>
-
+                                        {this.renderMsg()}
                                         <hr className="my-4" />
-
                                         <button
                                             className="btn btn-lg btn-primary btn-block text-uppercase"
                                             type="submit"
@@ -83,9 +96,9 @@ class PasswordForgetFormBase extends Component {
                                         >
                                             Restablecer contraseña
                                         </button>
-                                        <SignInLink/>
+                                        <SignInLink />
                                     </form>
-                                    <br/>
+                                    <br />
                                     {error && <p>{error.message}</p>}
                                 </div>
                             </div>

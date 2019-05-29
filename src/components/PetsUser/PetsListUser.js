@@ -10,15 +10,7 @@ const PetsListUserPage = () => (
     <div>
         <PetsUserList />
     </div>
-);
-
-const styles = {
-    twoColumns: {
-        columnCount: 3,
-        MozColumnCount: 3,
-        WebkitColumnCount: 3,
-    }
-}
+)
 
 class PetsListUser extends Component {
     constructor(props) {
@@ -104,54 +96,22 @@ class PetsListUser extends Component {
                 if (adoptionForm.pet.uid === pet.uid)
                     isFormFilled = true
             })
-        } 
+        }
         return isFormFilled
     }
 
     render() {
 
         const { pets, loading } = this.state;
-
+        let elements = []
         return (
             <div>
-
                 <header className="bg-secondary text-center py-3 mb-4">
                     <div className="container">
                         <h1 className="font-weight-light text-white">Listado de mascotas</h1>
                     </div>
                 </header>
                 <div className="container">
-                    <div className="row">
-
-                        {loading && <div>Cargando ...</div>}
-                        
-                        <ul style={styles.twoColumns}>
-                            <li style={{ listStyle: 'none' }}>
-                                {pets.map(pet => (
-                                    <div key={pet.uid} className="col-xl-3 col-md-6 mb-4" style={{maxWidth:'100%'}}>
-                                        <div className="card border-0 shadow" style={{ width: '85%', height:'390px' }}>
-                                            <img src={pet.photo} className="card-img-top" alt="..." style={{height:'220px'}}/>
-                                            <div className="card-body text-center">
-                                                <h5 className="card-title mb-0">{pet.name}</h5>
-                                                <div className="card-text text-black-50">Meses: {pet.age}</div>
-                                                <div className="card-text text-black-50">Raza: {pet.breed}</div>
-                                                <button disabled={this.isFormFilled(pet)}
-                                                    className="btn btn-lg btn-success btn-block text-uppercase"
-                                                    type="submit"
-                                                    onClick={() => this.onClick(pet)}
-                                                >
-                                                    {this.isFormFilled(pet) ?'Solicitud enviada': 'Adoptar'}
-                                            </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </li>
-                        </ul>
-                    </div>
-
-                    <hr />
-
                     <ul className="pagination justify-content-center">
                         <li className="page-item">
                             <a className="page-link" href="#" aria-label="Previous">
@@ -176,9 +136,57 @@ class PetsListUser extends Component {
                         </li>
                     </ul>
 
+                    <hr />
+
+                    <div className="row">
+
+                        {loading && <div>Cargando ...</div>}
+
+                        {pets.map((pet, i) => {
+                            if (!pet.isAdopted) {
+                                elements.push
+                                    (
+                                        <div key={'pet' + i} className="card border-0 shadow" style={{ width: '300px', height: '390px', marginTop: '30px' }}>
+                                            <img src={pet.photo} className="card-img-top" alt="..." style={{ height: '220px' }} />
+                                            <div className="card-body text-center">
+                                                <h5 className="card-title mb-0">{pet.name}</h5>
+                                                <div className="card-text text-black-50">Meses: {pet.age}</div>
+                                                <div className="card-text text-black-50">Raza: {pet.breed}</div>
+                                                <button disabled={this.isFormFilled(pet)}
+                                                    className="btn btn-lg btn-success btn-block text-uppercase"
+                                                    type="submit"
+                                                    onClick={() => this.onClick(pet)}
+                                                >
+                                                    {this.isFormFilled(pet) ? 'Solicitud enviada' : 'Adoptar'}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )
+
+                                if ((i + 1) % 3 === 0) {
+                                    let toRender = elements
+                                    elements = []
+
+                                    return (
+                                        <div key={pet.uid} className="col-xl-3 col-md-6 mb-4" style={{ maxWidth: '100%', height: '390px', paddingRight:'4em' }}>
+                                            {toRender}
+                                        </div>
+                                    )
+                                }
+                                else if ((i + 1) === pets.length) {
+                                    let toRender = elements
+                                    elements = []
+
+                                    return (
+                                        <div key={pet.uid} className="col-xl-3 col-md-6 mb-4" style={{ maxWidth: '100%', height: '390px', paddingRight:'4em' }}>
+                                            {toRender}
+                                        </div>
+                                    )
+                                }
+                            }
+                        })}
+                    </div>
                 </div>
-
-
             </div>
         );
     }
