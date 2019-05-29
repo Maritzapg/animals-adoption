@@ -3,12 +3,12 @@ import 'firebase/auth';
 import 'firebase/database';
 
 const config = {
-    apiKey: "AIzaSyDhxBsQI6a7X7BCM3Wk42yu1wDUt8C3ilY",
-    authDomain: "animals-adoption.firebaseapp.com",
-    databaseURL: "https://animals-adoption.firebaseio.com",
-    projectId: "animals-adoption",
-    storageBucket: "animals-adoption.appspot.com",
-    messagingSenderId: "478854852573"
+    apiKey: "AIzaSyDhxBsQI6a7X7BCM3Wk42yu1wDUt8C3ilY",//process.env.REACT_APP_KEY,//
+    authDomain: "animals-adoption.firebaseapp.com",//process.env.REACT_APP_AUTH_DOMAIN,//
+    databaseURL: "https://animals-adoption.firebaseio.com",//process.env.REACT_APP_DATABASE_URL,//
+    projectId: "animals-adoption",//process.env.REACT_APP_PROJECT_ID,//
+    storageBucket: "animals-adoption.appspot.com",//process.env.REACT_APP_STORAGE_BUCKET,//
+    messagingSenderId: "478854852573"//process.env.REACT_APP_MESSAGING_SENDER_ID,//
 };
 //firebase.initializeApp(config);
 
@@ -37,7 +37,7 @@ class Firebase {
 
     doSendEmailVerification = () =>
         this.auth.currentUser.sendEmailVerification({
-            url: 'http://localhost:3000'//process.env.REACT_APP_CONFIRMATION_EMAIL_REDIRECT,
+            url: 'https://animals-adoption.firebaseapp.com'//process.env.REACT_APP_CONFIRMATION_EMAIL_REDIRECT,//'http://localhost:3000'//
         });
 
     // *** Merge Auth and DB User API *** //

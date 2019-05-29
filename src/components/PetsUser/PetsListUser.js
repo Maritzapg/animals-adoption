@@ -112,7 +112,7 @@ class PetsListUser extends Component {
                     </div>
                 </header>
                 <div className="container">
-                    <ul className="pagination justify-content-center">
+                    {/*<ul className="pagination justify-content-center">
                         <li className="page-item">
                             <a className="page-link" href="#" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
@@ -136,7 +136,7 @@ class PetsListUser extends Component {
                         </li>
                     </ul>
 
-                    <hr />
+                    <hr />*/}
 
                     <div className="row">
 
