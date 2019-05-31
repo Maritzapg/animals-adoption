@@ -42,9 +42,25 @@ class SignInFormBase extends Component {
 
         this.props.firebase
             .doSignInWithEmailAndPassword(email, password)
-            .then(() => {
-                this.setState({ ...INITIAL_STATE });
-                this.props.history.push(ROUTES.LANDING);
+            .then((authUser) => {
+
+                this.props.firebase
+                    .user(authUser.user.uid)
+                    .on('value', snapshot => {
+                        let user = snapshot.val()
+                        if(!user)
+                        {
+                            this.props.firebase.doSignOut()
+                            let error = {}
+                            error.message = 'No hay registro de usuario correspondiente a este correo electrónico. El usuario puede haber sido eliminado.'
+                            this.setState({ error: error });
+                        }
+                        else
+                        {
+                            this.setState({ ...INITIAL_STATE });
+                            this.props.history.push(ROUTES.LANDING);
+                        }
+                    })
             })
             .catch(error => {
                 if(error.code==='auth/user-not-found')

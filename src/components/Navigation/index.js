@@ -52,12 +52,13 @@ const NavigationAuth = ({ authUser }) => (
                         <Link className="nav-link" to={ROUTES.ACCOUNT}>Cuenta</Link>
                         {/* <a className="nav-link" href="#">Mascotas para adoptar</a> */}
                     </li>
-                    {authUser.roles.includes(ROLES.ADMIN) && (
+                    {authUser.roles?
+                    authUser.roles.includes(ROLES.ADMIN) && (
                         <li className="nav-item">
                             <Link className="nav-link" to={ROUTES.ADMIN}>Administrar</Link>
                             {/* <a className="nav-link" href="#">Iniciar sesion</a> */}
                         </li>
-                    )}
+                    ):''}
                     <li className="nav-item" style={{cursor:'pointer'}}>
                         <SignOutButton />
                         {/* <a className="nav-link" href="#">Regístrarse</a> */}
@@ -71,9 +72,6 @@ const NavigationAuth = ({ authUser }) => (
 const NavigationNonAuth = () => (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark static-top">
         <div className="container">
-            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                <span className="navbar-toggler-icon"></span>
-            </button>
             <div className="collapse navbar-collapse" id="navbarResponsive">
                 <ul className="navbar-nav ml-auto">
                     <li className="nav-item">
