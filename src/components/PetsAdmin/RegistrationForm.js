@@ -240,7 +240,7 @@ class RegistrationFormBase extends Component {
                                     </div>
 
                                     <hr className="my-4" />
-                                    <button className="btn btn-lg btn-primary btn-block text-uppercase" type="submit" disabled={isInvalid}>Registrar mascota</button>
+                                    <button className="btn btn-lg btn-primary btn-block text-uppercase" type="submit" disabled={isInvalid}>{this.props.location.state!==undefined?'Guardar':'Registrar mascota'}</button>
                                 </form>
                             </div>
                         </div>

@@ -230,7 +230,11 @@ class UserListBase extends Component {
 
                                         {/* <button className="btn btn-info" type="submit">Ver más</button> */}
                                     </td>
-                                    <td><button onClick={() => this.handleClickOpen(user)} role="button" data-toggle="modal" className="btn btn-danger" type="button">Eliminar</button></td>
+                                    {user.roles ? 
+                                        ''
+                                        : 
+                                        <td><button onClick={() => this.handleClickOpen(user)} role="button" data-toggle="modal" className="btn btn-danger" type="button">Eliminar</button></td>
+                                    }
                                 </tr>
                             ))}
 

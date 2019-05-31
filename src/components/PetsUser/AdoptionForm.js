@@ -3,6 +3,7 @@ import { compose } from 'recompose';
 import firebase from 'firebase';
 import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
+import { withAuthorization } from '../Session';
 
 const INITIAL_STATE = {
     numberPhone: 0,
@@ -360,7 +361,9 @@ class AdoptionForm extends Component {
         )
     }
 }
+const condition = authUser => !!authUser;
 
 export default compose(
     withFirebase,
+    withAuthorization(condition),
 )(AdoptionForm);
