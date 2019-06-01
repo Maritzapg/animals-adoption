@@ -102,8 +102,17 @@ class PetsListUser extends Component {
 
     render() {
 
-        const { pets, loading } = this.state;
+        const { pets, loading } = this.state
         let elements = []
+
+        let adopted = []
+        pets.map((pet)=>{
+            if(!pet.isAdopted)
+            {
+                adopted.push(pet)
+            }
+        })
+
         return (
             <div>
                 <header className="bg-secondary text-center py-3 mb-4">
@@ -142,7 +151,7 @@ class PetsListUser extends Component {
 
                         {loading && <div>Cargando ...</div>}
 
-                        {pets.map((pet, i) => {
+                        {adopted.map((pet, i) => {
                             if (!pet.isAdopted) {
                                 elements.push
                                     (
@@ -173,7 +182,7 @@ class PetsListUser extends Component {
                                         </div>
                                     )
                                 }
-                                else if ((i + 1) === pets.length) {
+                                else if ((i + 1) === adopted.length) {
                                     let toRender = elements
                                     elements = []
 

@@ -69,6 +69,10 @@ class SignUpFormBase extends Component {
             this.props.history.push(ROUTES.HOME);
         })
         .catch(error => {
+            if(error.code==='auth/email-already-in-use')
+                {
+                    error.message = 'La dirección de correo electrónico ya está en uso por otra cuenta.'
+                }
             this.setState({ error });
         });
 
@@ -229,7 +233,7 @@ class SignUpFormBase extends Component {
                                         <button className="btn btn-lg btn-primary btn-block text-uppercase" type="submit" disabled={isInvalid}>Regístrate</button>
                                         <SignInLink/>
                                             
-                                        {error && <p>{error.message}</p>}
+                                        {error && <p style={{color:'red'}}>{error.message}</p>}
                                         <hr className="my-4" />
 
                                         {/* <button className="btn btn-lg btn-google btn-block text-uppercase" type="submit"><i className="fab fa-google mr-2"></i> Regístrate con Google </button> */}

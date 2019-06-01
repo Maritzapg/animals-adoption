@@ -146,7 +146,7 @@ class SignInFormBase extends Component {
                                             </div>
                                             {error &&
                                                 <div className="text-center">
-                                                    <a className="small">{error.message}</a>
+                                                    <a style={{color:'red'}} className="small">{error.message}</a>
                                                 </div>
                                             }
                                         </form>
